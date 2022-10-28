@@ -1,7 +1,16 @@
 import random
+import CheckPastMessage
 
-def handle_response(message: str) -> str:
+def handle_response(message) -> str:
     pmessage = message.lower()
+
+    #print(CheckPastMessage.callpastmessage())
+
+    if CheckPastMessage.callpastmessage() == pmessage and CheckPastMessage.checkdupmessage(CheckPastMessage.callpastmessage()):
+        CheckPastMessage.storedupmessage(pmessage)
+        return CheckPastMessage.callpastmessage()
+    else:
+        CheckPastMessage.storepastmessage(pmessage)
     
     if pmessage == "hello":
         return "bitch"
@@ -9,8 +18,8 @@ def handle_response(message: str) -> str:
     if pmessage == "roll":
         return "4"
     
-    if pmessage == '!help':
-        return "`Placeholder help text`"
+    if pmessage == 'help':
+        return "`Help - Gives a list of commands and uses\nPut a ! before the command to have the answer DMed to you\nSpinner - gives 1 of 8 random reasons why mado didn't go to school `"
     
     if pmessage == "spinner":
         chance = random.randint(1,8)
@@ -27,9 +36,6 @@ def handle_response(message: str) -> str:
         elif chance == 6:
             return "Mado got 'sick'"
         elif chance == 7:
-            return "`placeholder text`"
+            return "Mado missed the bus"
         elif chance == 8:
-            return "`placeholder text`"
-
-
-
+            return "Mado had to open a package for his mother"
