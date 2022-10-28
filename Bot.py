@@ -3,7 +3,7 @@ import discord
 
 async def send_message(message, usermessage, isprivate):
     try:
-        response = Responses.handle_response(usermessage)
+        response = Responses.handle_response(usermessage, str(message.channel))
         await message.author.send(response) if isprivate else await message.channel.send(response)
     except Exception as e:
         print(e)
