@@ -4,7 +4,7 @@ import CheckPastMessage
 def handle_response(message, channel, author) -> str:
     pmessage = message.lower()
 
-    if author == "190245035567087626" and pmessage == "spinner": 
+    if author == "190245035567087626" and pmessage == "spinner":  #if james uses the spinner command it "breaks" on him and only display one value
         return "Mado ran out of hotdog buns :scream:"
 
     if channel != "ebot-haven":

@@ -39,18 +39,17 @@ if __name__ == "__main__":
     playerlist = templist[1:]
     playerdict = {name: Player("alive", "none") for name in playerlist}
 
-    mafnumber = mafiachooser(playerlist, playerdict, mafcount)
-    positionsnumber = mafnumber
+    mafnumber = mafiachooser(playerlist, playerdict, mafcount)   #sets the roles for each player
+    positionsnumber = mafnumber     #A list of which index of playerlist has a roll
     sherifnumber = sherifchooser(positionsnumber, playerdict, playerlist)
     positionsnumber.append(sherifnumber)
     docnumber = doctorchooser(positionsnumber, playerdict, playerlist)
     positionsnumber.append(docnumber)
-    
     for i in range (0, len(playerlist)):
         if i not in positionsnumber:
             playerdict[playerlist[i]].changerole("bystander")
 
-
+    
 
 
 
