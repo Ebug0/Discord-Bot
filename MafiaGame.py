@@ -1,5 +1,3 @@
-from os import kill
-from pickle import FALSE
 from Classes import Player
 import random
 
@@ -48,7 +46,7 @@ def mafiaturn(mafnumber,playerdict,playerlist):
         killchoice = int(input("Enter in the number of the person you wish to kill: "))
         if killchoice in mafnumber or killchoice > len(playerlist)-1 or killchoice < 0:
             print("You entered an invalid choice your vote is forfit")
-        playerdict[playerlist[killchoice]].changevote(1,FALSE)
+        playerdict[playerlist[killchoice]].changevote(1,False)
     
 
 if __name__ == "__main__":
