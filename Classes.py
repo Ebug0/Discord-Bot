@@ -3,6 +3,7 @@ class Player:
         self.status = status
         self.role = role
         self.safe = ""
+        self.vote = 0
 
     def display(self):
         return (f"Status {self.status} Role {self.role} Temp ")
@@ -12,3 +13,8 @@ class Player:
     
     def changestatus(self, status):
         self.status = self
+    
+    def changevote(self, vote, clear):
+        if clear == True:
+            self.vote = 0
+        self.vote += vote
