@@ -29,7 +29,7 @@ def handle_response(message, channel) -> str:
             elif chance == 2:
                 return "Mado had to get a 'Haircut'"
             elif chance == 3:
-                return "Mado slept through his alarm for the 5th time"
+                return "Mado slept through his alarm for the 10th time"
             elif chance == 4:
                 return "Mado ran out of hotdog buns :scream:"
             elif chance == 5:
