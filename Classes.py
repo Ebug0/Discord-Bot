@@ -2,7 +2,7 @@ class Player:
     def __init__ (self, status, role):
         self.status = status
         self.role = role
-        self.temp = ""
+        self.safe = ""
 
     def display(self):
         return (f"Status {self.status} Role {self.role} Temp ")
