@@ -14,6 +14,9 @@ class Player:
     def changestatus(self, status):
         self.status = self
     
+    def changesafe(self,safe):
+        self.safe = safe
+    
     def changevote(self, vote, clear):
         if clear == True:
             self.vote = 0

@@ -39,15 +39,32 @@ def mafiaturn(mafnumber,playerdict,playerlist):
         print(f"Mafia {playerlist[i]} who do you wish to kill?")
         print("Here is who you can kill")
         for o in range (0,len(playerlist)):
-            if playerdict[playerlist[o]].status == "alive" and playerlist[i] != playerlist[o]:
-                print(f"Name: {playerlist[o]} enter {o} to kill")
+            if playerlist[i] == playerlist[o]:
+                print("You can't kill yourself")
             elif playerdict[playerlist[o]].role == "mafia":
                 print(f"Can't kill {playerlist[o]} because they are a fellow mafia")
+            elif playerdict[playerlist[o]].status == "alive":
+                print(f"Name: {playerlist[o]} enter {o} to kill")
+
         killchoice = int(input("Enter in the number of the person you wish to kill: "))
         if killchoice in mafnumber or killchoice > len(playerlist)-1 or killchoice < 0:
             print("You entered an invalid choice your vote is forfit")
+
         playerdict[playerlist[killchoice]].changevote(1,False)
-    
+
+def doctorturn(docnumber, playerdict, playerlist):
+    print(f"Doctor {playerlist[docnumber]} who do you wish to save")
+
+    for i in range (0,len(playerlist)):
+        if i != playerlist[docnumber] and playerdict[playerlist[i]].status == "alive":
+            print(f"Name: {playerlist[i]} Enter {i} to save this person")
+
+    savechoice = int(input("Enter in who you wish to save: "))
+    playerdict[playerlist[savechoice]].changesafe("safe")
+
+def sherifturn(sherifnumber, playerdict, playerlist):
+    print(2)
+
 
 if __name__ == "__main__":
     #players = input("Please enter mafia plus the name of the player with a space inbetween: ")
