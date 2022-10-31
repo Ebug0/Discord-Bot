@@ -4,9 +4,10 @@ class Player:
         self.role = role
         self.safe = ""
         self.vote = 0
+        self.invest = False
 
     def display(self):
-        return (f"Status {self.status} Role {self.role} Temp ")
+        return (f"Status {self.status} Role {self.role} Temp {self.safe} Vote {self.vote} Investigated {self.invest}")
 
     def changerole (self, role):
         self.role = role
