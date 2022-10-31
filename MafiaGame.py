@@ -49,8 +49,9 @@ def mafiaturn(mafnumber,playerdict,playerlist):
         killchoice = int(input("Enter in the number of the person you wish to kill: "))
         if killchoice in mafnumber or killchoice > len(playerlist)-1 or killchoice < 0:
             print("You entered an invalid choice your vote is forfit")
-
-        playerdict[playerlist[killchoice]].changevote(1,False)
+            
+        else:
+            playerdict[playerlist[killchoice]].changevote(1,False)
 
 def doctorturn(docnumber, playerdict, playerlist):
     print(f"Doctor {playerlist[docnumber]} who do you wish to save")
@@ -60,7 +61,10 @@ def doctorturn(docnumber, playerdict, playerlist):
             print(f"Name: {playerlist[i]} Enter {i} to save this person")
 
     savechoice = int(input("Enter in who you wish to save: "))
-    playerdict[playerlist[savechoice]].changesafe("safe")
+    if savechoice == docnumber:
+        print("You can't save yourself your save is forfit")
+    else:
+        playerdict[playerlist[savechoice]].changesafe("safe")
 
 def sherifturn(sherifnumber, playerdict, playerlist):
     print(2)
