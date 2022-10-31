@@ -4,11 +4,12 @@ import CheckPastMessage
 def handle_response(message, channel) -> str:
     pmessage = message.lower()
 
-    if CheckPastMessage.callpastmessage() == pmessage and CheckPastMessage.checkdupmessage(CheckPastMessage.callpastmessage()):
-        CheckPastMessage.storedupmessage(pmessage)
-        return CheckPastMessage.callpastmessage()
-    else:
-        CheckPastMessage.storepastmessage(pmessage)
+    if channel != "ebot-haven":
+        if CheckPastMessage.callpastmessage() == pmessage and CheckPastMessage.checkdupmessage(CheckPastMessage.callpastmessage()):
+            CheckPastMessage.storedupmessage(pmessage)
+            return CheckPastMessage.callpastmessage()
+        else:
+            CheckPastMessage.storepastmessage(pmessage)
     
     if channel == "ebot-haven":
         if pmessage == "hello":
