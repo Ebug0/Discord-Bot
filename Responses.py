@@ -1,8 +1,11 @@
 import random
 import CheckPastMessage
 
-def handle_response(message, channel) -> str:
+def handle_response(message, channel, author) -> str:
     pmessage = message.lower()
+
+    if author == "190245035567087626" and pmessage == "spinner": 
+        return "Mado ran out of hotdog buns :scream:"
 
     if channel != "ebot-haven":
         if CheckPastMessage.callpastmessage() == pmessage and CheckPastMessage.checkdupmessage(CheckPastMessage.callpastmessage()):
