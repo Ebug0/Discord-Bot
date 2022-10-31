@@ -10,10 +10,12 @@ async def send_message(message, usermessage, isprivate):
         print(e)
 
 def run_discord_bot():
-    intents = discord.Intents.default()
-    intents.message_content = True
-    client = discord.bot()
+    client = discord.Bot(intents = discord.Intents.all())
 
+    @client.slash_command(name = "hello", description = "The bot responses with a hello")
+    async def say_hello(ctx):
+        await ctx.respond("Bitch")
+    
     @client.event
     async def on_ready():
         print(f"{client.user} is now running")
@@ -28,18 +30,13 @@ def run_discord_bot():
         channel = str(message.channel)
 
         print(f"{username} said: {usermessage} in {channel}")
-
+        
         if usermessage[0] == "!":
             usermessage = usermessage[1:]
-            print(usermessage)
             await send_message(message, usermessage, isprivate=True)
         else:
             await send_message(message, usermessage, isprivate=False)
             
-    @client.slash_command(name = "hello", description = "The bot responses with a hello")
-    async def say_hello(ctx):
-        await ctx.respond("Bitch")
-    
     client.run(TOKEN)
 
     
