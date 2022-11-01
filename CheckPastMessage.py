@@ -3,11 +3,11 @@
 pastmessage = ""
 dupmessage = ""
 
-def storepastmessage(message):
+def storepastmessage(message): 
     global pastmessage
     pastmessage = message
 
-def storedupmessage(message):
+def storedupmessage(message): #makes sure it doesnt repeat itself forever
     global dupmessage
     dupmessage = message
 

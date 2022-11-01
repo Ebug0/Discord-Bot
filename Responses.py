@@ -2,19 +2,19 @@ import random
 import CheckPastMessage
 
 def handle_response(message, channel, author) -> str:
-    pmessage = message.lower()
+    pmessage = message.lower()                                    #makes the message all lowercase characters for comparision
 
     if author == "190245035567087626" and pmessage == "spinner":  #if james uses the spinner command it "breaks" on him and only display one value
         return "Mado ran out of hotdog buns :scream:"
 
-    if channel != "ebot-haven":
-        if CheckPastMessage.callpastmessage() == pmessage and CheckPastMessage.checkdupmessage(CheckPastMessage.callpastmessage()):
+    if channel != "ebot-haven":                                   #checks to see if the same thing is said twice and if so send that message in the channel
+        if CheckPastMessage.callpastmessage() == pmessage and CheckPastMessage.checkdupmessage(CheckPastMessage.callpastmessage()): 
             CheckPastMessage.storedupmessage(pmessage)
             return CheckPastMessage.callpastmessage()
         else:
             CheckPastMessage.storepastmessage(pmessage)
     
-    if channel == "ebot-haven":
+    if channel == "ebot-haven":                                   #makes the text commands only work in the desginated channel (ebot-haven)
         if pmessage == "hello":
             return "bitch"
     
