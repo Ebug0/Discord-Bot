@@ -127,6 +127,11 @@ if __name__ == "__main__":
     doctorturn(docnumber, playerdict, playerlist)
     sherifturn(sherifnumber, playerdict, playerlist)
 
+def endOfTurn(playerlist,playerdict):
+    
+
+
+    
 
 
 
