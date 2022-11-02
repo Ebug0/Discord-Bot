@@ -6,13 +6,13 @@ def mafiachooser(playerlist, playerdict, mafcount):
     mafnumbers = [] 
     
     for i in range (0,mafcount):
-        chance = random.randint(0, len(playerlist)-1)                                                   #creats a random number within the index of the playerlist
+        chance = random.randint(0, len(playerlist)-1)                                                   #creates a random number within the index of the playerlist
 
-        while chance in mafnumbers:                                                                     #if that index is already taken by then it randomly creats another one untill its not in the list
+        while chance in mafnumbers:                                                                     #if that index is already taken by then it randomly creates another one until its not in the list
             chance = random.randint(0,len(playerlist)-1)
 
         mafnumbers.append(chance)                                                                       #adds the index to list of mafia for call back later
-        playerdict[playerlist[chance]].changerole("mafia")                                              #changes a players roll to mafia 
+        playerdict[playerlist[chance]].changerole("mafia")                                              #changes a players role to mafia 
 
     return mafnumbers 
 
@@ -23,7 +23,7 @@ def sherifchooser(positionnumbers, playerdict, playerlist):
     while chance in positionnumbers:
         chance = random.randint(0,len(playerdict)-1)
 
-    playerdict[playerlist[chance]].changerole("sherif")
+    playerdict[playerlist[chance]].changerole("sheriff")
     sherifnumber = chance                                                                               #puts the index of the sherifnumber in a variable for later callback
 
     return sherifnumber
