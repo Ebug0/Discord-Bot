@@ -99,6 +99,8 @@ def sherifturn(sherifnumber, playerdict, playerlist):
     
     investchoice = int(input("Please enter the number of the person you wish to investigate: "))
     #sherifturn function not done yet
+    
+def endOfTurn(playerlist,playerdict):
 
 
 
@@ -127,7 +129,7 @@ if __name__ == "__main__":
     doctorturn(docnumber, playerdict, playerlist)
     sherifturn(sherifnumber, playerdict, playerlist)
 
-def endOfTurn(playerlist,playerdict):
+
     
 
 
