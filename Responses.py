@@ -25,7 +25,7 @@ def handle_response(message, channel, author) -> str:
         if pmessage == 'help':
             return "`Help - Gives a list of commands and uses\nPut a ! before the command to have the answer DMed to you\nSpinner - gives 1 of 8 random reasons why mado didn't go to school \
                 \nroll - Rolls a 6 sided die for you`"
-    #test
+    
         if pmessage == "spinner":
             chance = random.randint(1,10)
             if chance == 1:

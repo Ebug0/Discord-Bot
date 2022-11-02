@@ -104,9 +104,9 @@ def sherifturn(sherifnumber, playerdict, playerlist):
 
 if __name__ == "__main__":
     #players = input("Please enter mafia plus the name of the player with a space inbetween: ") #gets a list of players
-    players = "m Ethan Mado Vejay Mason Ben Jace Ty"
+    players = "m Ethan Mado Vejay Mason Ben Jace Ty" #temp mesaure to make testing quicker
     #mafcount = int(input("Enter in how many maffia members you wish to have: ")) 
-    mafcount = 2
+    mafcount = 2 #same thing as above
     templist = players.split()                                                                  #breaks up the full string of players and makes it into a list
     mafnumber = []
     positionsnumber = []
