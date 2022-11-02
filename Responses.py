@@ -27,20 +27,24 @@ def handle_response(message, channel, author) -> str:
                 \nroll - Rolls a 6 sided die for you`"
     
         if pmessage == "spinner":
-            chance = random.randint(1,8)
+            chance = random.randint(1,10)
             if chance == 1:
                 return "Mado was a little tired today :cry:"
             elif chance == 2:
-                return "Mado had to get a 'Haircut'"
+                return "Mado had to get a 'Haircut'!"
             elif chance == 3:
-                return "Mado slept through his alarm for the 10th time"
+                return "Mado slept through his alarm for the 10th time!"
             elif chance == 4:
                 return "Mado ran out of hotdog buns :scream:"
             elif chance == 5:
-                return "Mado's mom told him to stay home"
+                return "Mado's mom told him to stay home!"
             elif chance == 6:
-                return "Mado got 'sick'"
+                return "Mado got 'sick'!"
             elif chance == 7:
-                return "Mado missed the bus"
+                return "Mado missed the bus!"
             elif chance == 8:
-                return "Mado had to open a package for his mother"
+                return "Mado had to open a package for his mother!"
+            elif chance == 9:
+                return "Mado had to watch his baby sister for the day!"
+            elif chance == 10:
+                return "Mado just felt like it today"
