@@ -101,13 +101,33 @@ def sherifturn(sherifnumber, playerdict, playerlist):
     #sherifturn function not done yet
     
 def endOfTurn(playerlist,playerdict):
+    votecount = []
     print("The turn has ended") #If the player has the most votes, change status in object to dead 
-    for i in range (0,len(playerlist)):
-        for o in range (0,len(playerlist)):
-            if i == o:
-                return
-            if playerdict[playerlist[i]] > playerdict[playerlist[o]]:
-                playerdict[playerlist[i]].changestatus("dead")
+    
+    for i in playerlist:
+        if playerdict[i].vote > 0:
+            votecount.append(i)
+    if len(votecount) == 1:
+        playerdict[votecount[0]].changestatus("dead")
+    elif len(votecount == 0):
+        print("The Mafia is an idiot and tried to kill someone he couldn't")
+        return
+    else:
+        for i in range(len(votecount)):
+            for o in range (len(votecount)):
+                if i == o:
+                    tiebreaker = random.randint(0,len(votecount))
+            
+                
+                
+        
+        
+        
+        
+    
+   
+               
+            
                 
             
             
