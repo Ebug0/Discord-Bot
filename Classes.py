@@ -13,7 +13,7 @@ class Player:
         self.role = role
     
     def changestatus(self, status):
-        self.status = self
+        self.status = status
     
     def changesafe(self,safe):
         self.safe = safe
