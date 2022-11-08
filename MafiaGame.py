@@ -100,16 +100,17 @@ def sherifturn(sherifnumber, playerdict, playerlist):
     investchoice = int(input("Please enter the number of the person you wish to investigate: "))
     #sherifturn function not done yet
     
-def endOfTurn(playerlist,playerdict):
+def endOfTurn(playerdict,playerlist):
     votecount = []
     print("The turn has ended") #If the player has the most votes, change status in object to dead 
     
     for i in playerlist:
         if playerdict[i].vote > 0:
             votecount.append(i)
+    print(votecount)
     if len(votecount) == 1:
         playerdict[votecount[0]].changestatus("dead")
-    elif len(votecount == 0):
+    elif len(votecount) == 0:
         print("The Mafia is an idiot and tried to kill someone he couldn't")
         return
     else:
@@ -117,37 +118,11 @@ def endOfTurn(playerlist,playerdict):
             if playerdict[i].vote >= 2:
                 playerdict[i].changestatus("dead")
             else:
-               tiebreaker =  random.randint(0,len(votecount))
+               tiebreaker =  random.randint(0,len(votecount)-1)
                print("The Mafia killed", tiebreaker)
+               playerdict[votecount[tiebreaker]].changestatus("dead")
+               break
                
-                
-            
-        
-            
-            
-            
-            
-                
-                
-        
-        
-        
-        
-    
-   
-               
-            
-                
-            
-            
-           
-        
-        
-        
-        
-    
-    
-    
 
 
 if __name__ == "__main__":
@@ -174,13 +149,13 @@ if __name__ == "__main__":
     mafiaturn(mafnumber, playerdict, playerlist)
     doctorturn(docnumber, playerdict, playerlist)
     sherifturn(sherifnumber, playerdict, playerlist)
+    endOfTurn(playerdict,playerlist)
 
 
     
 
 
     
-
 
 
     for i in playerlist:                                                                        #just to help debug which objects have which values at the end of game (dev only)
