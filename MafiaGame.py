@@ -113,10 +113,19 @@ def endOfTurn(playerlist,playerdict):
         print("The Mafia is an idiot and tried to kill someone he couldn't")
         return
     else:
-        for i in range(len(votecount)):
-            for o in range (len(votecount)):
-                if i == o:
-                    tiebreaker = random.randint(0,len(votecount))
+        for i in votecount:
+            if playerdict[i].vote >= 2:
+                playerdict[i].changestatus("dead")
+            else:
+               tiebreaker =  random.randint(0,len(votecount))
+               print("The Mafia killed", tiebreaker)
+               
+                
+            
+        
+            
+            
+            
             
                 
                 
