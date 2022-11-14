@@ -125,6 +125,11 @@ def endOfTurn(playerdict,playerlist):
                 print("The Mafia killed", tiebreaker)
                 playerdict[votecount[tiebreaker]].changestatus("dead")
                 break
+    for i in playerlist:
+        playerdict[i].changesafe("")
+        playerdict[i].changevote(0, True)
+            
+        
     
     
            
