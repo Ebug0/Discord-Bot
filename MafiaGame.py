@@ -117,11 +117,19 @@ def endOfTurn(playerdict,playerlist):
         for i in votecount:
             if playerdict[i].vote >= 2:
                 playerdict[i].changestatus("dead")
+                print("mafia2")
             else:
                tiebreaker =  random.randint(0,len(votecount)-1)
-               print("The Mafia killed", tiebreaker)
-               playerdict[votecount[tiebreaker]].changestatus("dead")
-               break
+            if playerdict[i].safe == "safe":
+                playerdict[i].changestatus("alive")
+                print("safe")
+            else:
+                print("The Mafia killed", tiebreaker)
+                playerdict[votecount[tiebreaker]].changestatus("dead")
+                break
+    
+    
+           
                
 
 
