@@ -4,8 +4,13 @@ import CheckPastMessage
 def handle_response(message, channel, author) -> str:
     pmessage = message.lower()                                    #makes the message all lowercase characters for comparision
 
+    if pmessage == "cum":
+        return "Ben said that was a no no word"
+
     if author == "190245035567087626" and pmessage == "spinner":  #if james uses the spinner command it "breaks" on him and only display one value
-        return "Mado ran out of hotdog buns :scream:"
+        chance = random.randint(0,200)
+        if chance == 100:
+            return "James maybe you should take a break from the spinner command"
 
     if channel != "ebot-haven":                                   #checks to see if the same thing is said twice and if so send that message in the channel
         if CheckPastMessage.callpastmessage() == pmessage and CheckPastMessage.checkdupmessage(CheckPastMessage.callpastmessage()): 
@@ -27,7 +32,7 @@ def handle_response(message, channel, author) -> str:
                 \nroll - Rolls a 6 sided die for you`"
     
         if pmessage == "spinner":
-            chance = random.randint(1,10)
+            chance = random.randint(1,11)
             if chance == 1:
                 return "Mado was a little tired today :cry:"
             elif chance == 2:
@@ -48,3 +53,5 @@ def handle_response(message, channel, author) -> str:
                 return "Mado had to watch his baby sister for the day!"
             elif chance == 10:
                 return "Mado just felt like it today"
+            elif chance == 11:
+                return "Mado had to go buy a bike today"
