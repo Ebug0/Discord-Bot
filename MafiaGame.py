@@ -100,6 +100,12 @@ def sherifturn(sherifnumber, playerdict, playerlist):
     investchoice = int(input("Please enter the number of the person you wish to investigate: "))
     #sherifturn function not done yet
     
+    if investchoice >= len(playerlist)-1 or investchoice < 0:
+        print(f"You entered an invalid choice and you can't investigate them")
+    else:
+        playerdict[playerlist[investchoice]].changeinvest(True)
+         
+    
 def endOfTurn(playerdict,playerlist):
     votecount = []
     print("The turn has ended") #If the player has the most votes, change status in object to dead 
