@@ -21,7 +21,7 @@ def handle_response(message, channel, author) -> str:
     
     if channel == "ebot-haven":                                   #makes the text commands only work in the desginated channel (ebot-haven)
         if pmessage == "hello":
-            return "bitch"
+            return "ebot says your a bitch"
     
         if pmessage == "roll":
             chance = random.randint(1,6)
@@ -32,7 +32,7 @@ def handle_response(message, channel, author) -> str:
                 \nroll - Rolls a 6 sided die for you`"
     
         if pmessage == "spinner":
-            chance = random.randint(1,11)
+            chance = random.randint(1,12)
             if chance == 1:
                 return "Mado was a little tired today :cry:"
             elif chance == 2:
@@ -55,3 +55,5 @@ def handle_response(message, channel, author) -> str:
                 return "Mado just felt like it today"
             elif chance == 11:
                 return "Mado had to go buy a bike today"
+            elif chance == 12:
+                return "Mado didn't have a choice"
