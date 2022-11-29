@@ -104,8 +104,26 @@ def sherifturn(sherifnumber, playerdict, playerlist):
         print(f"You entered an invalid choice and you can't investigate them")
     else:
         playerdict[playerlist[investchoice]].changeinvest(True)
-         
-    
+        
+def playervote(playerdict,playerlist):
+    print("It's time to vote")
+    for i in range(0,len(playerlist)):
+        print(f"Who do you wish to vote?", (playerlist[i]))
+        for o in range (0,len(playerlist)):
+            if playerlist[i] == playerlist[o]:                                                          
+                print("You can't kill yourself")
+            elif playerdict[playerlist[o]].status == "alive":
+                print(f"Name: {playerlist[o]} enter {o} to kill")
+        killchoice = int(input("Enter the number of the person you want to kill "))
+        deadlist = []
+        for i in playerdict:
+            if playerdict[i].status == ("dead"):
+                deadlist.append(i)
+        if killchoice in deadlist:
+            print("You entered an invalid choice and your vote is forfit")
+        else:
+            playerdict[playerlist[killchoice]].changevote(1,False)
+                    
 def endOfTurn(playerdict,playerlist):
     votecount = []
     print("The turn has ended") #If the player has the most votes, change status in object to dead 
@@ -163,10 +181,11 @@ if __name__ == "__main__":
         if i not in positionsnumber:                                                            #anyplayer that did not get a special role gets the default role
             playerdict[playerlist[i]].changerole("bystander")
 
-    mafiaturn(mafnumber, playerdict, playerlist)
-    doctorturn(docnumber, playerdict, playerlist)
-    sherifturn(sherifnumber, playerdict, playerlist)
-    endOfTurn(playerdict,playerlist)
+    #mafiaturn(mafnumber, playerdict, playerlist)
+    #doctorturn(docnumber, playerdict, playerlist)
+    #sherifturn(sherifnumber, playerdict, playerlist)
+    playervote(playerdict,playerlist)
+    #endOfTurn(playerdict,playerlist)
 
 
     
