@@ -1,6 +1,7 @@
 from Classes import Player
 import random
 from collections import OrderedDict
+from statistics import mode
 def mafiachooser(playerlist, playerdict, mafcount):
     mafnumbers = [] 
     
@@ -72,10 +73,18 @@ def sherifturn(sherifnumber, playerdict, playerlist):
         print(f"You entered an invalid choice and you can't investigate them")
     else:
         playerdict[playerlist[investchoice]].changeinvest(True)
-        
+
+def rankDictionary(data):
+    temp = {}
+    for i in data:
+        temp[i] = sorted(data[i])
+    
+    return temp
+
 def playervote(playerdict,playerlist):
     votecount = []
     votedict = {}
+    votelist = []
     print("It's time to vote")
     for i in range(0,len(playerlist)):
         print(f"Who do you wish to vote?", (playerlist[i]))
@@ -85,6 +94,7 @@ def playervote(playerdict,playerlist):
             elif playerdict[playerlist[o]].status == "alive":
                 print(f"Name: {playerlist[o]} enter {o} to kill")
         killchoice = int(input("Enter the number of the person you want to kill "))
+        votelist.append(killchoice)
         deadlist = []
         for i in playerdict:
             if playerdict[i].status == ("dead"):
@@ -103,15 +113,24 @@ def playervote(playerdict,playerlist):
             print("Everyone voted for themselves for some reason and wasted their vote")
             return
         else:
-            for key,values in playerdict.items():
-                if values.vote >= 1:
-                    votedict[key] = str(values.vote)
-                    votedict = OrderedDict(sorted(votedict.items()))
-        sorteddict = sorted(votedict.items(),key=lambda x: x[1])
-        for i in sorteddict:
-            print(i[0], i[1])
+            print(votelist)
+            result = mode(votelist)
+            print("The person who dies value is", result)
+            playerdict[playerlist[result]].changestatus("dead")
+            
+            #for i in votecount:
+
+            #for key,values in playerdict.items():
+                #if values.vote >= 1:
+                   #votedict[key] = str(values.vote)
+            #votedict = OrderedDict(sorted(votedict.items()))
+            #sorteddict = sorted(votedict.items(),key=lambda x: x[1])
+            #for i in sorteddict:
+                #print(i[0], i[1])
+            #print(votedict)
+
                     
-        #print(sorteddict)            
+            #print(sorteddict)            
 
         #print(votedict)
 
