@@ -148,10 +148,7 @@ def playervote(playerdict,playerlist):
                     
         #print(votedict)
                 
-            
-            
-                
-                    
+         
 def endOfTurn(playerdict,playerlist):
     votecount = []
     print("The turn has ended") #If the player has the most votes, change status in object to dead 
@@ -180,13 +177,7 @@ def endOfTurn(playerdict,playerlist):
     for i in playerlist:
         playerdict[i].changesafe("")
         playerdict[i].changevote(0, True)
-            
         
-    
-    
-           
-               
-
 
 if __name__ == "__main__":
     #players = input("Please enter mafia plus the name of the player with a space inbetween: ") #gets a list of players
