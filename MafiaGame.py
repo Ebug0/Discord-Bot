@@ -1,5 +1,6 @@
 from Classes import Player
 import random
+from collections import OrderedDict
 
 def mafiachooser(playerlist, playerdict, mafcount):
 
@@ -106,12 +107,14 @@ def sherifturn(sherifnumber, playerdict, playerlist):
         playerdict[playerlist[investchoice]].changeinvest(True)
         
 def playervote(playerdict,playerlist):
+    votecount = []
+    votedict = {}
     print("It's time to vote")
     for i in range(0,len(playerlist)):
         print(f"Who do you wish to vote?", (playerlist[i]))
         for o in range (0,len(playerlist)):
             if playerlist[i] == playerlist[o]:                                                          
-                print("You can't kill yourself")
+                print("You can't vote yourself")
             elif playerdict[playerlist[o]].status == "alive":
                 print(f"Name: {playerlist[o]} enter {o} to kill")
         killchoice = int(input("Enter the number of the person you want to kill "))
@@ -123,6 +126,31 @@ def playervote(playerdict,playerlist):
             print("You entered an invalid choice and your vote is forfit")
         else:
             playerdict[playerlist[killchoice]].changevote(1,False)
+            
+        for i in playerlist:
+            if playerdict[i].vote > 0:
+                votecount.append(i)
+        if len(votecount) == 1:
+            playerdict[votecount[0]].changestatus("dead")
+        elif len(votecount) == 0:
+            print("Everyone voted for themselves for some reason and wasted their vote")
+            return
+        else:
+            for key,values in playerdict.items():
+                if values.vote >= 1:
+                    votedict[key] = str(values.vote)
+                    votedict = OrderedDict(sorted(votedict.items()))
+        sorteddict = sorted(votedict.items(),key=lambda x: x[1])
+        for i in sorteddict:
+            print(i[0], i[1])
+                    
+        #print(sorteddict)            
+                    
+        #print(votedict)
+                
+            
+            
+                
                     
 def endOfTurn(playerdict,playerlist):
     votecount = []
