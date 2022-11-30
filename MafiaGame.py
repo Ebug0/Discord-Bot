@@ -1,7 +1,7 @@
 from Classes import Player
 import random
 from collections import OrderedDict
-from statistics import mode
+import statistics
 def mafiachooser(playerlist, playerdict, mafcount):
     mafnumbers = [] 
     
@@ -114,8 +114,10 @@ def playervote(playerdict,playerlist):
             return
         else:
             print(votelist)
-            result = mode(votelist)
-            print("The person who dies value is", result)
+            result = statistics.multimode(votelist)
+      
+            
+            print("The person who dies value is", str(result))
             playerdict[playerlist[result]].changestatus("dead")
             
             #for i in votecount:
