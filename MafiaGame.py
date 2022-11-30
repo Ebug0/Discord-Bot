@@ -108,7 +108,7 @@ def playervote(playerdict,playerlist):
                 votecount.append(i)
         if len(votecount) == 1:
             playerdict[votecount[0]].changestatus("dead")
-        elif len(votecount) == 0:
+        if len(votecount) == 0:
             print("Everyone voted for themselves for some reason and wasted their vote")
             return
         else:
@@ -117,9 +117,9 @@ def playervote(playerdict,playerlist):
             modelist = statistics.multimode(votelist)
             if len(modelist) > 1:
                 print("Nobody dies because there was a tie")
+                
             else:
                 result = statistics.multimode(votelist)
-                
                 print("The person who dies value is", str(result))
                 playerdict[playerlist[result[0]]].changestatus("dead")
                 
