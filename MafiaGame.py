@@ -83,7 +83,6 @@ def rankDictionary(data):
 
 def playervote(playerdict,playerlist):
     votecount = []
-    votedict = {}
     votelist = []
     print("It's time to vote")
     for i in range(0,len(playerlist)):
@@ -113,13 +112,21 @@ def playervote(playerdict,playerlist):
             print("Everyone voted for themselves for some reason and wasted their vote")
             return
         else:
+            modelist = []
             print(votelist)
-            result = statistics.multimode(votelist)
-      
-            
-            print("The person who dies value is", str(result))
-            playerdict[playerlist[result]].changestatus("dead")
-            
+            modelist = statistics.multimode(votelist)
+            if len(modelist) > 1:
+                print("Nobody dies because there was a tie")
+            else:
+                result = statistics.multimode(votelist)
+                
+                print("The person who dies value is", str(result))
+                playerdict[playerlist[result[0]]].changestatus("dead")
+                
+        for i in playerlist:
+            playerdict[i].changesafe("")
+            playerdict[i].changevote(0, True)
+        
             #for i in votecount:
 
             #for key,values in playerdict.items():
