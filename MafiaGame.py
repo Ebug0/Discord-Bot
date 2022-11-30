@@ -93,6 +93,7 @@ def playervote(playerdict,playerlist):
             elif playerdict[playerlist[o]].status == "alive":
                 print(f"Name: {playerlist[o]} enter {o} to kill")
         killchoice = int(input("Enter the number of the person you want to kill "))
+        
         votelist.append(killchoice)
         deadlist = []
         for i in playerdict:
@@ -115,13 +116,13 @@ def playervote(playerdict,playerlist):
             modelist = []
             print(votelist)
             modelist = statistics.multimode(votelist)
-            if len(modelist) > 1:
+            if len(modelist) >= 2:
                 print("Nobody dies because there was a tie")
-                
+                    
             else:
                 result = statistics.multimode(votelist)
                 print("The person who dies value is", str(result))
-                playerdict[playerlist[result[0]]].changestatus("dead")
+                #playerdict[playerlist[result[0]]].changestatus("dead")
                 
         for i in playerlist:
             playerdict[i].changesafe("")
