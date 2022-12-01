@@ -251,7 +251,6 @@ async def endOfTurn(playerdict,playerlist):                     #This function e
         playerdict[i].changesafe("")
         playerdict[i].changevote(0, True)
         
-
 async def newmain(mafcount, playerlist, playerid, ctxx):
     global ctx
     ctx = ctxx
