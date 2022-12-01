@@ -114,3 +114,6 @@ class MyView(View):
     
 
     
+    
+    def changeinvest(self, invest):
+        self.invest = invest

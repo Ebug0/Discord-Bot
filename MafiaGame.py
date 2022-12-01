@@ -37,21 +37,25 @@ def doctorchooser(positionnumbers, playerdict, playerlist):
 
 def mafiaturn(mafnumber,playerdict,playerlist):
     for i in mafnumber:
-        print(f"Mafia {playerlist[i]} who do you wish to kill?")                                        #each mafia gets to vote on how they wish to kill
-        print("Here is who you can kill")
-        for o in range (0,len(playerlist)):
-            if playerlist[i] == playerlist[o]:                                                          #tells the player they can't kill themselves
-                print("You can't kill yourself")
-            elif playerdict[playerlist[o]].role == "mafia":                                             #lets them know who are fellow mafia members
-                print(f"Can't kill {playerlist[o]} because they are a fellow mafia")
-            elif playerdict[playerlist[o]].status == "alive":                                           #shows the rest of the players who are still alive
-                print(f"Name: {playerlist[o]} enter {o} to kill")
-        killchoice = int(input("Enter in the number of the person you wish to kill: "))
-        if killchoice in mafnumber or killchoice >= len(playerlist)-1 or killchoice < 0:                #makes sure they don't enter an invalid answer and if they do forfit it
-            print("You entered an invalid choice your vote is forfit")
-            
+        if playerdict[playerlist[i]].status == "dead":
+            print("You are dead and cannot act")
         else:
-            playerdict[playerlist[killchoice]].changevote(1,False)                                      #adds one to the vote for the player they which to kill
+            print(f"Mafia {playerlist[i]} who do you wish to kill?")                                        #each mafia gets to vote on how they wish to kill
+            print("Here is who you can kill")
+            for o in range (0,len(playerlist)):
+                if playerlist[i] == playerlist[o]:                                                          #tells the player they can't kill themselves
+                    print("You can't kill yourself")
+                elif playerdict[playerlist[o]].role == "mafia":                                             #lets them know who are fellow mafia members
+                    print(f"Can't kill {playerlist[o]} because they are a fellow mafia")
+                elif playerdict[playerlist[o]].status == "alive":                                           #shows the rest of the players who are still alive
+                    print(f"Name: {playerlist[o]} enter {o} to kill")
+            killchoice = int(input("Enter in the number of the person you wish to kill: "))
+            if killchoice in mafnumber or killchoice >= len(playerlist)-1 or killchoice < 0:                #makes sure they don't enter an invalid answer and if they do forfit it
+                print("You entered an invalid choice your vote is forfit")
+            
+            else:
+                playerdict[playerlist[killchoice]].changevote(1,False)                                      #adds one to the vote for the player they which to kill
+            
 
 def doctorturn(docnumber, playerdict, playerlist):
     print(f"Doctor {playerlist[docnumber]} who do you wish to save")
@@ -132,7 +136,7 @@ def endOfTurn(playerdict,playerlist):
         if playerdict[i].vote > 0:
             votecount.append(i)
     print(votecount)
-    if len(votecount) == 1 and playerdict[votecount[0]].safe != "safe":
+    if len(votecount) == 1 and playerdict[votecount[0]].safe != "safe": #If only one person gets a vote and the doctor doesn't save them 
         playerdict[votecount[0]].changestatus("dead")
     elif len(votecount) == 0:
         print("The Mafia is an idiot and tried to kill someone he couldn't")
@@ -142,22 +146,17 @@ def endOfTurn(playerdict,playerlist):
             if playerdict[i].vote >= 2:
                 playerdict[i].changestatus("dead")
             else:
-               tiebreaker =  random.randint(0,len(votecount)-1)
+               tiebreaker =  random.randint(0,len(votecount)-1)         #This initiates the tiebreaker
             if playerdict[i].safe == "safe":
                 playerdict[i].changestatus("alive")  
             else:
-                print("The Mafia killed", tiebreaker)
-                playerdict[votecount[tiebreaker]].changestatus("dead")
+                print("The Mafia killed", tiebreaker)                   #The tie breaker is finished and tells the players who died
+                playerdict[votecount[tiebreaker]].changestatus("dead")  #This kills the loser of the tiebreaker
                 break
-    for i in playerlist:
+    for i in playerlist:                                                #This clears the votes
         playerdict[i].changesafe("")
         playerdict[i].changevote(0, True)
-
-
-
-
-
-
+        
 
 
 def main(mafcount = None, playerlist = None, playerid = None):
@@ -182,10 +181,30 @@ def main(mafcount = None, playerlist = None, playerid = None):
     #mafiaturn(mafnumber, playerdict, playerlist)
     #doctorturn(docnumber, playerdict, playerlist)
     #sherifturn(sherifnumber, playerdict, playerlist)
-    playervote(playerdict,playerlist)
+    #playervote(playerdict,playerlist)
     #endOfTurn(playerdict,playerlist)
-    
-    
+    win = False
+    while win == False:
+        alive = []
+        if playerdict[playerlist[docnumber]].status == "alive":
+            doctorturn(docnumber, playerdict, playerlist)
+        if playerdict[playerlist[sherifnumber]].status == "alive":
+            sherifturn(sherifnumber, playerdict, playerlist)
+        for i in playerlist:
+            if playerdict[i].status == "alive":
+                alive.append[i]
+            if playerdict[i].status == "dead":
+                alive.pop[i]
+        for i in mafnumber:  
+            if playerdict[playerlist[mafnumber]].status == "alive" and len(alive) == 0:   #Make a list for everyone who is alive
+                print("The Mafia Won!")
+                win = True
+        if playerdict[playerlist[mafnumber]].status == "dead":
+            print("The Players Won!")
+            win = True        
+        
+            
+        
     for i in playerlist:                                                                        #just to help debug which objects have which values at the end of game (dev only)
         print(playerdict[i].display())
 
