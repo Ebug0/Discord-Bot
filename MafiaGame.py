@@ -188,7 +188,7 @@ def main():
     mafnumber = []
     positionsnumber = []
     playerlist = templist[1:]                                                                   #gets rid of the mafia invoke text
-    playerdict = {name: Player("alive", "none") for name in (playerlist)}                         #makes each player in the list a object in a dictionary to be called later
+    playerdict = {name: Player("alive", "none",3) for name in (playerlist)}                         #makes each player in the list a object in a dictionary to be called later
     mafnumber = mafiachooser(playerlist, playerdict, mafcount)                                  #sets the special roles for the players that get them which the function
     positionsnumber = mafnumber.copy()                                                          #A list of which index of playerlist has a roll
     sherifnumber = sherifchooser(positionsnumber, playerdict, playerlist)   
@@ -205,19 +205,32 @@ def main():
     #endOfTurn(playerdict,playerlist)
     win = False
     while win == False:
-        alive = []
+        alive = []                                                       #Make a list for everyone who is alive
+        deadmafia = []
         if playerdict[playerlist[docnumber]].status == "alive":
             doctorturn(docnumber, playerdict, playerlist)
         if playerdict[playerlist[sherifnumber]].status == "alive":
             sherifturn(sherifnumber, playerdict, playerlist)
-        for i in playerdict:
+        mafiaturn(mafnumber, playerdict, playerlist)
+        endOfTurn(playerdict,playerlist)
+        playervote(playerdict,playerlist)
+        
+            
+        for i in playerlist:
             if playerdict[i].status == ("alive"):
                 alive.append(i)
-        for i in mafnumber:  
-            if playerdict[playerlist[mafnumber]].status == "alive" and len(alive) == 0:   #Make a list for everyone who is alive
-                print("The Mafia Won!")
-                win = True
-        if playerdict[playerlist[mafnumber]].status == "dead":
+        
+        for i in mafnumber:
+            if playerdict[playerlist[i]].status == "alive":
+                alive.remove(playerlist[i])
+            else:
+                deadmafia.append(i)
+             
+        if  len(alive) == 0:   
+            print("The Mafia Won!")
+            win = True
+        
+        if len(deadmafia) == len(mafnumber):
             print("The Players Won!")
             win = True        
         
