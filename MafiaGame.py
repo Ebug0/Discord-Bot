@@ -163,12 +163,12 @@ async def sherifturn(sherifnumber, playerdict, playerlist):
         playerdict[playerlist[investchoice]].changeinvest(True)
     await send_message("Sherif Turn over")
         
-async def playervote(playerdict,playerlist):
+async def playervote(playerdict,playerlist):                #This function allows all of the players to vote to kick someone out
     votelist = []
     deadlist = []
     modelist = []
 
-    for i in playerdict:
+    for i in playerdict:                                       #If a player is dead, add them to the dead player list
         if playerdict[i].status == ("dead"):
             deadlist.append(i)
 
@@ -180,7 +180,7 @@ async def playervote(playerdict,playerlist):
 
         for o in range (0,len(playerlist)):
 
-            if playerlist[i] == playerlist[o]:                                                          
+            if playerlist[i] == playerlist[o]:                                                               #This allows players to vote
                 await send_message("You can't vote yourself")
             elif playerdict[playerlist[o]].status == "alive":
                 await send_message(f"Name: {playerlist[o]} enter {o} to vote")
@@ -205,13 +205,13 @@ async def playervote(playerdict,playerlist):
         else:
             votelist.append(killchoice)
 
-    if len(votelist) == 0:
+    if len(votelist) == 0:              
         await send_message("Everyone voted for themselves for some reason and wasted their vote")
         return
         
-    modelist = statistics.multimode(votelist)
-     
-    if len(modelist) >= 2:
+    modelist = statistics.multimode(votelist)                   #This creates a list and finds the most frequent number in the list
+      
+    if len(modelist) >= 2:                                      #If there is more than one most frequent number it calls for a tie
         await send_message("Nobody dies because there was a tie")  
         await send_message(f"These people tied in votes" )
         for i in modelist:
@@ -221,22 +221,22 @@ async def playervote(playerdict,playerlist):
 
     await send_message("The votes were", votelist)
         
-async def endOfTurn(playerdict,playerlist):
+async def endOfTurn(playerdict,playerlist):                     #This function ends the turn for the mafia players 
     votecount = []
     await send_message("The Night has ended") 
     
     for i in playerlist:
-        if playerdict[i].vote > 0:
+        if playerdict[i].vote > 0:                              #If someone has a vote add them to a list 
             votecount.append(i)
     print(votecount)
-    if len(votecount) == 1 and playerdict[votecount[0]].safe != "safe": #If only one person gets a vote and the doctor doesn't save them 
+    if len(votecount) == 1 and playerdict[votecount[0]].safe != "safe": #If only one person gets a vote and the doctor doesn't save them then kill them
         playerdict[votecount[0]].changestatus("dead")
     elif len(votecount) == 0:
         await send_message("The Mafia is an idiot and tried to kill someone he couldn't")
         return
     else:
         for i in votecount:
-            if playerdict[i].vote >= 2:
+            if playerdict[i].vote >= 2:        #If the majority of mafia vote for this player then they die 
                 if playerdict[i].safe != "safe":
                     playerdict[i].changestatus("dead")
                     await send_message(f"{playerdict[i]} has died. :cry:")
@@ -284,13 +284,13 @@ async def newmain(mafcount, playerlist, playerid, ctxx):
         alive = []                                                       #Make a list for everyone who is alive
         deadmafia = []
 
-        if playerdict[playerlist[docnumber]].status == "alive":
+        if playerdict[playerlist[docnumber]].status == "alive":        #This makes it so if the doctor is alive then he can use his turn
             doctorturn(docnumber, playerdict, playerlist)
 
-        if playerdict[playerlist[sherifnumber]].status == "alive":
+        if playerdict[playerlist[sherifnumber]].status == "alive":     #Same thing above, if sherriff is alive, he can use his turn
             sherifturn(sherifnumber, playerdict, playerlist)
 
-        mafiaturn(mafnumber, playerdict, playerlist)
+        mafiaturn(mafnumber, playerdict, playerlist)                    #These three run the rest of the game 
         endOfTurn(playerdict,playerlist)
         playervote(playerdict,playerlist)
         
@@ -357,21 +357,21 @@ def main():
         playervote(playerdict,playerlist)
         
             
-        for i in playerlist:
+        for i in playerlist:                                 #This makes a list for everyone who is alive 
             if playerdict[i].status == ("alive"):
                 alive.append(i)
         
         for i in mafnumber:
-            if playerdict[playerlist[i]].status == "alive":
+            if playerdict[playerlist[i]].status == "alive":                          #For every mafia there is, it removes them from the alive list so that the list is only of non mafia players
                 alive.remove(playerlist[i])
             else:
-                deadmafia.append(i)
+                deadmafia.append(i)               #If they are not alive, move them to the dead mafia list 
              
-        if  len(alive) == 0:   
+        if  len(alive) == 0:                       #If the length of alive civilian players is 0 then  the mafia win and stops the loop
             print("The Mafia Won!")
             win = True
         
-        if len(deadmafia) == len(mafnumber):
+        if len(deadmafia) == len(mafnumber):       #If the length of dead mafia is equal to the length of total mafia then the civilians win and stops the loop
             print("The Players Won!")
             win = True        
         
