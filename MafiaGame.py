@@ -210,11 +210,9 @@ def main():
             doctorturn(docnumber, playerdict, playerlist)
         if playerdict[playerlist[sherifnumber]].status == "alive":
             sherifturn(sherifnumber, playerdict, playerlist)
-        for i in playerlist:
-            if playerdict[i].status == "alive":
-                alive.append[i]
-            if playerdict[i].status == "dead":
-                alive.pop[i]
+        for i in playerdict:
+            if playerdict[i].status == ("alive"):
+                alive.append(i)
         for i in mafnumber:  
             if playerdict[playerlist[mafnumber]].status == "alive" and len(alive) == 0:   #Make a list for everyone who is alive
                 print("The Mafia Won!")
