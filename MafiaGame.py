@@ -82,7 +82,6 @@ def rankDictionary(data):
     return temp
 
 def playervote(playerdict,playerlist):
-    votecount = []
     votelist = []
     print("It's time to vote")
     for i in range(0,len(playerlist)):
@@ -104,49 +103,31 @@ def playervote(playerdict,playerlist):
         else:
             playerdict[playerlist[killchoice]].changevote(1,False)
             
-        for i in playerlist:
-            if playerdict[i].vote > 0:
-                votecount.append(i)
-        if len(votecount) == 1:
-            playerdict[votecount[0]].changestatus("dead")
-        if len(votecount) == 0:
-            print("Everyone voted for themselves for some reason and wasted their vote")
-            return
+    for i in playerlist:
+        if playerdict[i].vote > 0:
+                votelist.append(i)
+                if len(votelist) == 0:
+                    print("Everyone voted for themselves for some reason and wasted their vote")
+                    return
+        
         else:
             modelist = []
-            print(votelist)
             modelist = statistics.multimode(votelist)
-            if len(modelist) >= 2:
-                print("Nobody dies because there was a tie")
-                    
-            else:
-                result = statistics.multimode(votelist)
-                print("The person who dies value is", str(result))
-                #playerdict[playerlist[result[0]]].changestatus("dead")
-                
-        for i in playerlist:
+            result = statistics.multimode(votelist)
+            playerdict[playerlist[result[0]]].changestatus("dead")
+            
+    if len(modelist) >= 2:
+        print("Nobody dies because there was a tie")
+        playerdict[playerlist[modelist[0]]].changestatus("alive") 
+        playerdict[playerlist[modelist[1]]].changestatus("alive")
+        playerdict[playerlist[modelist[2]]].changestatus("alive")  
+    print("These people tied in votes", modelist)
+    print("The votes were", votelist)
+    for i in playerlist:
             playerdict[i].changesafe("")
             playerdict[i].changevote(0, True)
         
-            #for i in votecount:
-
-            #for key,values in playerdict.items():
-                #if values.vote >= 1:
-                   #votedict[key] = str(values.vote)
-            #votedict = OrderedDict(sorted(votedict.items()))
-            #sorteddict = sorted(votedict.items(),key=lambda x: x[1])
-            #for i in sorteddict:
-                #print(i[0], i[1])
-            #print(votedict)
-
-                    
-            #print(sorteddict)            
-
-        #print(votedict)
-
-
-
-
+           
 
 
 def endOfTurn(playerdict,playerlist):
