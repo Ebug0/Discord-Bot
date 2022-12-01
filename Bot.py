@@ -1,6 +1,9 @@
 import Responses
 import discord
 from Token import TOKEN #Hides the bot token from github
+from discord.commands import *
+from time import sleep
+from discord.ext import commands
 
 async def send_message(message, usermessage, isprivate):
     try:
@@ -12,10 +15,16 @@ async def send_message(message, usermessage, isprivate):
 def run_discord_bot():
     client = discord.Bot(intents = discord.Intents.all()) 
 
-    @client.slash_command(name = "hello", description = "The bot responses with a hello")               #a simple slash command to see how slash commands worked invoked with /hello
-    async def say_hello(ctx):
-        await ctx.respond("Bitch")
+    @client.slash_command(name='greet', description='Greet someone!')
+    @option("name", description="Enter your friend's name",required=False,default = None)
+    async def greet(ctx: discord.ApplicationContext,name: str):
+        await ctx.respond(f"Hello {name}!") 
     
+    @client.slash_command(name='start-mafia-game', description='Start mafia game with a max of 10 players')
+    
+    async def greet(ctx: discord.ApplicationContext):
+        await ctx.respond(f"Name1:, ID1: !") 
+
     @client.event
     async def on_ready():                                                                               #when the bot is started up it shows us a message in console
         print(f"{client.user} is now running")
@@ -25,7 +34,7 @@ def run_discord_bot():
         if message.author == client.user:                                                               #makes it so the bot doesnt try to respond to its own message
             return
         
-        username = str(message.author)                                                                  #breaks downt he message object into its parts
+        username = str(message.author)                                                                  #breaks down the message object into its parts
         usermessage = str(message.content)
         channel = str(message.channel)
 
@@ -39,5 +48,14 @@ def run_discord_bot():
             
     client.run(TOKEN) 
 
-    
 
+
+    @commands.command()
+    async def ga(self, ctx):
+        channel = self.bot.get_channel(channel_id)
+        message = await channel.fetch_message(message_id)
+        users = set()
+        for reaction in message.reactions:
+            async for user in reaction.users():
+                users.add(user)
+        await ctx.send(f"users: {', '.join(user.name for user in users)}")
