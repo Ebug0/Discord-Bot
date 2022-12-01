@@ -3,6 +3,7 @@ import random
 from collections import OrderedDict
 import statistics
 def mafiachooser(playerlist, playerdict, mafcount):
+
     mafnumbers = [] 
     
     for i in range (0,mafcount):
@@ -12,6 +13,7 @@ def mafiachooser(playerlist, playerdict, mafcount):
         mafnumbers.append(chance)                                                                       #adds the index to list of mafia for call back later
         playerdict[playerlist[chance]].changerole("mafia")                                              #changes a players role to mafia 
     return mafnumbers 
+
 def sherifchooser(positionnumbers, playerdict, playerlist):
     
     chance = random.randint(0, len(playerlist)-1) 
@@ -20,6 +22,7 @@ def sherifchooser(positionnumbers, playerdict, playerlist):
     playerdict[playerlist[chance]].changerole("sheriff")
     sherifnumber = chance                                                                               #puts the index of the sherifnumber in a variable for later callback
     return sherifnumber
+    
 def doctorchooser(positionnumbers, playerdict, playerlist):
     chance = random.randint(0,len(playerlist)-1)
     while chance in positionnumbers:
@@ -44,6 +47,7 @@ def mafiaturn(mafnumber,playerdict,playerlist):
             
         else:
             playerdict[playerlist[killchoice]].changevote(1,False)                                      #adds one to the vote for the player they which to kill
+
 def doctorturn(docnumber, playerdict, playerlist):
     print(f"Doctor {playerlist[docnumber]} who do you wish to save")
     for i in range (0,len(playerlist)):
@@ -56,6 +60,7 @@ def doctorturn(docnumber, playerdict, playerlist):
         print("You entered an invalid choice your save is forfit")
     else:
         playerdict[playerlist[savechoice]].changesafe("safe")
+
 def sherifturn(sherifnumber, playerdict, playerlist):
     print(f"Sherif {playerlist[sherifnumber]} Please choose who you wish to investigate")
     for i in range (0,len(playerlist)):                                                                 #same as above except they are investigating a person to find out their role
@@ -67,22 +72,22 @@ def sherifturn(sherifnumber, playerdict, playerlist):
             print(f"Name: {playerlist[i]} Enter {i} to investigate this person")
     
     investchoice = int(input("Please enter the number of the person you wish to investigate: "))
-    #sherifturn function not done yet
     
     if investchoice >= len(playerlist)-1 or investchoice < 0:
-        print(f"You entered an invalid choice and you can't investigate them")
+        print(f"You entered an invalid choice and you wasted your investigation")
     else:
+        print(f"Name: {playerlist[investchoice]} There role is {playerdict[playerlist[investchoice]].role}")
         playerdict[playerlist[investchoice]].changeinvest(True)
-
-def rankDictionary(data):
-    temp = {}
-    for i in data:
-        temp[i] = sorted(data[i])
-    
-    return temp
-
+        
 def playervote(playerdict,playerlist):
     votelist = []
+    deadlist = []
+    modelist = []
+
+    for i in playerdict:
+        if playerdict[i].status == ("dead"):
+            deadlist.append(i)
+
     print("It's time to vote")
     for i in range(0,len(playerlist)):
         print(f"Who do you wish to vote?", (playerlist[i]))
@@ -93,43 +98,27 @@ def playervote(playerdict,playerlist):
                 print(f"Name: {playerlist[o]} enter {o} to kill")
         killchoice = int(input("Enter the number of the person you want to kill "))
         
-        votelist.append(killchoice)
-        deadlist = []
-        for i in playerdict:
-            if playerdict[i].status == ("dead"):
-                deadlist.append(i)
-        if killchoice in deadlist:
+        if killchoice in deadlist or (killchoice == i and o):
             print("You entered an invalid choice and your vote is forfit")
         else:
-            playerdict[playerlist[killchoice]].changevote(1,False)
-            
-    for i in playerlist:
-        if playerdict[i].vote > 0:
-                votelist.append(i)
-                if len(votelist) == 0:
-                    print("Everyone voted for themselves for some reason and wasted their vote")
-                    return
+            votelist.append(killchoice)
+
+    if len(votelist) == 0:
+        print("Everyone voted for themselves for some reason and wasted their vote")
+        return
         
-        else:
-            modelist = []
-            modelist = statistics.multimode(votelist)
-            result = statistics.multimode(votelist)
-            playerdict[playerlist[result[0]]].changestatus("dead")
-            
+    modelist = statistics.multimode(votelist)
+     
     if len(modelist) >= 2:
-        print("Nobody dies because there was a tie")
-        playerdict[playerlist[modelist[0]]].changestatus("alive") 
-        playerdict[playerlist[modelist[1]]].changestatus("alive")
-        playerdict[playerlist[modelist[2]]].changestatus("alive")  
-    print("These people tied in votes", modelist)
+        print("Nobody dies because there was a tie")  
+        print(f"These people tied in votes" )
+        for i in modelist:
+            print(playerlist[i])
+    else:
+        playerdict[playerlist[modelist[0]]].changestatus("dead")
+
     print("The votes were", votelist)
-    for i in playerlist:
-            playerdict[i].changesafe("")
-            playerdict[i].changevote(0, True)
         
-           
-
-
 def endOfTurn(playerdict,playerlist):
     votecount = []
     print("The turn has ended") #If the player has the most votes, change status in object to dead 
@@ -166,7 +155,7 @@ def endOfTurn(playerdict,playerlist):
 
 
 
-if __name__ == "__main__":
+def main():
     #players = input("Please enter mafia plus the name of the player with a space inbetween: ") #gets a list of players
     players = "m Ethan Mado Vejay Mason Ben Jace Ty" #temp mesaure to make testing quicker
     #mafcount = int(input("Enter in how many maffia members you wish to have: ")) 
@@ -194,3 +183,6 @@ if __name__ == "__main__":
     
     for i in playerlist:                                                                        #just to help debug which objects have which values at the end of game (dev only)
         print(playerdict[i].display())
+
+if __name__ == "__main__":
+    main()
