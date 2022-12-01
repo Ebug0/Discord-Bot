@@ -4,7 +4,7 @@ from Token import TOKEN #Hides the bot token from github
 from discord.commands import *
 from discord.ui import *
 from discord.ext import commands
-from Classes import *
+from ButtonClasses import MyView
 
 async def send_message(message, usermessage, isprivate):
     try:
@@ -22,47 +22,11 @@ def run_discord_bot():
     async def greet(ctx: discord.ApplicationContext,name: str):
         await ctx.respond(f"Hello {name}!") 
     
-    
-    
-
-
-
-
-
     @client.command()
     async def start_mafia_game (ctx):
         view = MyView(ctx)
         
         await ctx.send("Game started click below to join!", view = view)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     @client.event
     async def on_ready():                                                                               #when the bot is started up it shows us a message in console
