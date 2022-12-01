@@ -17,15 +17,15 @@ class MyView(View):
     @discord.ui.button(label = "Join", style = discord.ButtonStyle.green)
     async def button_callback (self, button, interaction):
         self.players_name.append(interaction.user.name)
-        self.player_id.append(interaction.user.id)
+        self.player_id.append(interaction)
         await interaction.response.send_message(f"{interaction.user} has joined the game!\nThese are the people currently in the game {self.players_name}")
 
     @discord.ui.button(label = "Click to Start", style = discord.ButtonStyle.red, custom_id = "start")
     async def danger_button_callback (self, button, interaction):
 
-        if self.mafchoosen == True:
+        if self.mafchoosen == True and len(self.players_name) > 0:
             await interaction.response.edit_message (content = f"the Game has started with {self.players_name}", view = None)
-            newmain(self.mafnumber, self.players_name, self.player_id)
+            await newmain(self.mafnumber, self.players_name, self.player_id, self.ctx)
             self.value = "started"
             self.stop()
         else:

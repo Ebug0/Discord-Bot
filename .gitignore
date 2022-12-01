@@ -5,3 +5,6 @@ __pycache__/Responses.cpython-310.pyc
 Token.py
 __pycache__/Token.cpython-310.pyc
 __pycache__/Classes.cpython-310.pyc
+*.pyc
+*.pyc
+*.pyc

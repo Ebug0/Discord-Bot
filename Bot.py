@@ -1,10 +1,11 @@
 import Responses
 import discord
-from Token import TOKEN #Hides the bot token from github
+from Client import client
 from discord.commands import *
 from discord.ui import *
 from discord.ext import commands
 from ButtonClasses import MyView
+from Token import TOKEN #Hides the bot token from github
 
 async def send_message(message, usermessage, isprivate):
     try:
@@ -14,23 +15,31 @@ async def send_message(message, usermessage, isprivate):
         print(e)
 
 def run_discord_bot():
-    client = discord.Bot(intents = discord.Intents.all()) 
+     
 
+     
+    @client.slash_command(name='print', description='print whats given')
+    @option("print here1", description="Enter in a thing to print",required=False,default = None)
+    @option("print here2", description="Enter in a thing to print",required=False,default = None)
+    async def printthing(ctx: discord.ApplicationContext, printhere1: str, printhere2: str):
+        await ctx.respond(f"{printhere1}{printhere2}") 
 
     @client.slash_command(name='greet', description='Greet someone!')
     @option("name", description="Enter your friend's name",required=False,default = None)
     async def greet(ctx: discord.ApplicationContext,name: str):
-        await ctx.respond(f"Hello {name}!") 
+        test = client.get_user(name)
+        await ctx.respond(f"Hello {test}!") 
     
     @client.command()
     async def start_mafia_game (ctx):
         view = MyView(ctx)
-        
         await ctx.send("Game started click below to join!", view = view)
 
     @client.event
     async def on_ready():                                                                               #when the bot is started up it shows us a message in console
         print(f"{client.user} is now running")
+    
+        
 
     @client.event
     async def on_message(message):                                                                      #triggers this function when a message is sent
@@ -41,7 +50,7 @@ def run_discord_bot():
         usermessage = str(message.content)
         channel = str(message.channel)
 
-        print(f"{username} said: {usermessage} in {channel}")                                           #used for debugging purposes to show what the bot is getting
+        print(f"{username} said: {usermessage} in {channel}: Bot file")                                           #used for debugging purposes to show what the bot is getting
         
         if usermessage[0] == "!":                                                                       #Checks to see if the bot should DM the answer to the author
             usermessage = usermessage[1:]
@@ -49,7 +58,7 @@ def run_discord_bot():
         else:
             await send_message(message, usermessage, isprivate=False)
             
-    client.run(TOKEN) 
+    client.run(TOKEN)
 
 
 """ 
