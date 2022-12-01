@@ -6,7 +6,15 @@ from discord.commands import *
 from discord.ui import *
 import discord
 
-def mafiachooser(playerlist, playerdict, mafcount):
+async def send_message(ctx, message, id = None, private = False):
+    #await message.author.send(response) if isprivate else await message.channel.send(response)
+    if private == True:
+        await ctx.send.id(message)
+    else:
+        await ctx.send(message)
+
+
+def mafiachooser(playerlist, playerdict, mafcount, ctx):
 
     mafnumbers = [] 
     
@@ -15,6 +23,7 @@ def mafiachooser(playerlist, playerdict, mafcount):
         while chance in mafnumbers:                                                                     #if that index is already taken by then it randomly creates another one until its not in the list
             chance = random.randint(0,len(playerlist)-1)
         mafnumbers.append(chance)                                                                       #adds the index to list of mafia for call back later
+        send_message(ctx, f"You have been picked as a mafia!", playerdict[playerlist[i]].id)
         playerdict[playerlist[chance]].changerole("mafia")                                              #changes a players role to mafia 
     return mafnumbers 
 
@@ -56,7 +65,6 @@ def mafiaturn(mafnumber,playerdict,playerlist):
             else:
                 playerdict[playerlist[killchoice]].changevote(1,False)                                      #adds one to the vote for the player they which to kill
             
-
 def doctorturn(docnumber, playerdict, playerlist):
     print(f"Doctor {playerlist[docnumber]} who do you wish to save")
     for i in range (0,len(playerlist)):
@@ -158,18 +166,24 @@ def endOfTurn(playerdict,playerlist):
         playerdict[i].changevote(0, True)
         
 
-def newmain(mafcount = None, playerlist = None, playerid = None):
+def newmain(mafcount = None, playerlist = None, playerid = None, ctx = None):
+
     positionsnumber = []                                                               
-    playerdict = {name: Player("alive", "none", id) for name, id in zip (playerlist, playerid)}                       
-    mafnumber = mafiachooser(playerlist, playerdict, mafcount)                                  
-    positionsnumber = mafnumber.copy()                                                         
+    playerdict = {name: Player("alive", "none", id) for name, id in zip (playerlist, playerid)}    
+
+    mafnumber = mafiachooser(playerlist, playerdict, mafcount, ctx)                                  
+    positionsnumber = mafnumber.copy()
+
     sherifnumber = sherifchooser(positionsnumber, playerdict, playerlist)   
     positionsnumber.append(sherifnumber)
+
     docnumber = doctorchooser(positionsnumber, playerdict, playerlist)                          
     positionsnumber.append(docnumber)
+
     for i in range (0, len(playerlist)):
         if i not in positionsnumber:                                                            
             playerdict[playerlist[i]].changerole("bystander")
+
     mafiaturn(mafnumber, playerdict, playerlist)
     #doctorturn(docnumber, playerdict, playerlist)
     #sherifturn(sherifnumber, playerdict, playerlist)
