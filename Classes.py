@@ -29,6 +29,8 @@ class Player:
         if clear == True:
             self.vote = 0
         self.vote += vote
+    def changeinvest(self, invest):
+        self.invest = invest
 
 class MyView(View):
 
@@ -115,5 +117,3 @@ class MyView(View):
 
     
     
-    def changeinvest(self, invest):
-        self.invest = invest
