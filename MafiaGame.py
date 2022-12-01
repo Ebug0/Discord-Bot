@@ -180,13 +180,20 @@ def main():
     #endOfTurn(playerdict,playerlist)
     win = False
     while win == False:
+        alive = []
         if playerdict[playerlist[docnumber]].status == "alive":
             doctorturn(docnumber, playerdict, playerlist)
         if playerdict[playerlist[sherifnumber]].status == "alive":
             sherifturn(sherifnumber, playerdict, playerlist)
-        if playerdict[playerlist[mafnumber]].status == "alive" and playerdict[playerlist].status == "dead":
-            print("The Mafia Won!")
-            win = True
+        for i in playerlist:
+            if playerdict[i].status == "alive":
+                alive.append[i]
+            if playerdict[i].status == "dead":
+                alive.pop[i]
+        for i in mafnumber:  
+            if playerdict[playerlist[mafnumber]].status == "alive" and len(alive) == 0:   #Make a list for everyone who is alive
+                print("The Mafia Won!")
+                win = True
         if playerdict[playerlist[mafnumber]].status == "dead":
             print("The Players Won!")
             win = True        
