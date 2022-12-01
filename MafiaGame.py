@@ -158,17 +158,37 @@ def endOfTurn(playerdict,playerlist):
         playerdict[i].changevote(0, True)
         
 
+def newmain(mafcount = None, playerlist = None, playerid = None):
+    positionsnumber = []                                                               
+    playerdict = {name: Player("alive", "none", id) for name, id in zip (playerlist, playerid)}                       
+    mafnumber = mafiachooser(playerlist, playerdict, mafcount)                                  
+    positionsnumber = mafnumber.copy()                                                         
+    sherifnumber = sherifchooser(positionsnumber, playerdict, playerlist)   
+    positionsnumber.append(sherifnumber)
+    docnumber = doctorchooser(positionsnumber, playerdict, playerlist)                          
+    positionsnumber.append(docnumber)
+    for i in range (0, len(playerlist)):
+        if i not in positionsnumber:                                                            
+            playerdict[playerlist[i]].changerole("bystander")
+    mafiaturn(mafnumber, playerdict, playerlist)
+    #doctorturn(docnumber, playerdict, playerlist)
+    #sherifturn(sherifnumber, playerdict, playerlist)
+    #playervote(playerdict,playerlist)
+    #endOfTurn(playerdict,playerlist)
 
-def main(mafcount = None, playerlist = None, playerid = None):
+    for i in playerlist:                                                                        #just to help debug which objects have which values at the end of game (dev only)
+        print(playerdict[i].display())
+
+def main():
     #players = input("Please enter mafia plus the name of the player with a space inbetween: ") #gets a list of players
-    players = "m Ethan Mado Vejay Mason Ben Jace Ty" #temp mesaure to make testing quicker
+    players = "Ethan Mado Vejay Mason Ben Jace Ty" #temp mesaure to make testing quicker
     #mafcount = int(input("Enter in how many maffia members you wish to have: ")) 
     mafcount = 2 #same thing as above
     templist = players.split()                                                                  #breaks up the full string of players and makes it into a list
     mafnumber = []
     positionsnumber = []
     playerlist = templist[1:]                                                                   #gets rid of the mafia invoke text
-    playerdict = {name: Player("alive", "none") for name in playerlist}                         #makes each player in the list a object in a dictionary to be called later
+    playerdict = {name: Player("alive", "none") for name in (playerlist)}                         #makes each player in the list a object in a dictionary to be called later
     mafnumber = mafiachooser(playerlist, playerdict, mafcount)                                  #sets the special roles for the players that get them which the function
     positionsnumber = mafnumber.copy()                                                          #A list of which index of playerlist has a roll
     sherifnumber = sherifchooser(positionsnumber, playerdict, playerlist)   
