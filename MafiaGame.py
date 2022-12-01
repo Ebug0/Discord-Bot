@@ -2,6 +2,10 @@ from Classes import Player
 import random
 from collections import OrderedDict
 import statistics
+from discord.commands import *
+from discord.ui import *
+import discord
+
 def mafiachooser(playerlist, playerdict, mafcount):
 
     mafnumbers = [] 
@@ -30,6 +34,7 @@ def doctorchooser(positionnumbers, playerdict, playerlist):
     playerdict[playerlist[chance]].changerole("doctor")                                                 #same as above but for the doctor role
     docnumber = chance
     return docnumber
+
 def mafiaturn(mafnumber,playerdict,playerlist):
     for i in mafnumber:
         print(f"Mafia {playerlist[i]} who do you wish to kill?")                                        #each mafia gets to vote on how they wish to kill
@@ -155,7 +160,7 @@ def endOfTurn(playerdict,playerlist):
 
 
 
-def main():
+def main(mafcount = None, playerlist = None, playerid = None):
     #players = input("Please enter mafia plus the name of the player with a space inbetween: ") #gets a list of players
     players = "m Ethan Mado Vejay Mason Ben Jace Ty" #temp mesaure to make testing quicker
     #mafcount = int(input("Enter in how many maffia members you wish to have: ")) 

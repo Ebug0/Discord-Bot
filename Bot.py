@@ -2,8 +2,9 @@ import Responses
 import discord
 from Token import TOKEN #Hides the bot token from github
 from discord.commands import *
-from time import sleep
+from discord.ui import *
 from discord.ext import commands
+from Classes import *
 
 async def send_message(message, usermessage, isprivate):
     try:
@@ -15,15 +16,53 @@ async def send_message(message, usermessage, isprivate):
 def run_discord_bot():
     client = discord.Bot(intents = discord.Intents.all()) 
 
+
     @client.slash_command(name='greet', description='Greet someone!')
     @option("name", description="Enter your friend's name",required=False,default = None)
     async def greet(ctx: discord.ApplicationContext,name: str):
         await ctx.respond(f"Hello {name}!") 
     
-    @client.slash_command(name='start-mafia-game', description='Start mafia game with a max of 10 players')
     
-    async def greet(ctx: discord.ApplicationContext):
-        await ctx.respond(f"Name1:, ID1: !") 
+    
+
+
+
+
+
+    @client.command()
+    async def start_mafia_game (ctx):
+        view = MyView(ctx)
+        
+        await ctx.send("Game started click below to join!", view = view)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     @client.event
     async def on_ready():                                                                               #when the bot is started up it shows us a message in console
@@ -49,7 +88,7 @@ def run_discord_bot():
     client.run(TOKEN) 
 
 
-
+""" 
     @commands.command()
     async def ga(self, ctx):
         channel = self.bot.get_channel(channel_id)
@@ -58,4 +97,4 @@ def run_discord_bot():
         for reaction in message.reactions:
             async for user in reaction.users():
                 users.add(user)
-        await ctx.send(f"users: {', '.join(user.name for user in users)}")
+        await ctx.send(f"users: {', '.join(user.name for user in users)}") """
