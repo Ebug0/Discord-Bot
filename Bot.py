@@ -49,7 +49,11 @@ def run_discord_bot():
         print(f"{client.user} is now running")
 
     @client.event
+
+
+    @client.event
     async def on_message(msg):
+            print(f"{msg.author} said {msg.content} in {msg.channel}:Music fun")
             if msg.content.startswith("?play"):
 
                 try:
@@ -93,8 +97,7 @@ def run_discord_bot():
                     await voice_clients[msg.guild.id].disconnect()
                 except Exception as err:
                     print(err)     
-
-    @client.event
+    """ 
     async def on_message(message):                                                                      #triggers this function when a message is sent
         if message.author == client.user:                                                               #makes it so the bot doesnt try to respond to its own message
             return
@@ -109,7 +112,7 @@ def run_discord_bot():
             usermessage = usermessage[1:]
             await send_message(message, usermessage, isprivate=True)
         else:
-            await send_message(message, usermessage, isprivate=False)
+            await send_message(message, usermessage, isprivate=False) """
             
     client.run(TOKEN)
 
