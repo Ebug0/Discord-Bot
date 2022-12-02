@@ -54,52 +54,50 @@ def run_discord_bot():
         try:
             voice_client = await ctx.author.voice.channel.connect()
             voice_clients[voice_client.guild.id] = voice_client
-        except:
-            print("error")
+        except Exception as err:
+            print(err)
 
         try:
-            
-
             loop = asyncio.get_event_loop()
             data = await loop.run_in_executor(None, lambda: ytdl.extract_info(url, download=False))
 
             song = data['url']
-            player = discord.FFmpegPCMAudio(song, **ffmpeg_options)
+            player = discord.FFmpegPCMAudio(song, **ffmpeg_options, executable = "C:\\FFMPEG\\ffmpeg.exe")
 
             voice_clients[ctx.guild.id].play(player)
-
+            await ctx.respond(f"{ctx.author} started {url}")
         except Exception as err:
             print(err)
+    
+    @client.slash_command(name = "pause", description = "Pauses the current song")
+    async def pause_music(ctx: discord.ApplicationContext):
+        try:
+            voice_clients[ctx.guild.id].pause()
+            await ctx.respond(f"{ctx.author} paused the music")
+        except Exception as err:
+            await ctx.respond("No music playing")
+            print(err)
 
+    @client.slash_command(name = "resume", description = "resumes the current music")
+    async def resume_music(ctx):
+        try:
+            voice_clients[ctx.guild.id].resume()
+            await ctx.respond(f"{ctx.author} resumed the music")
+        except Exception as err:
+            await ctx.resond("No music playing")
+            print(err)
+        
+    @client.slash_command(name = "stop", description = "Stops the music and make the bot leave the call")
+    async def stop_music(ctx):
+        try:
+            voice_clients[ctx.guild.id].resume()
+            await voice_clients[ctx.guild.id].disconnect()
+            await ctx.respond(f"{ctx.author} stopped the music")
+        except Exception as err:
+            await ctx.resond("No music playing")
+            print(err)      
 
     @client.event
-    async def on_message(msg):
-            print(f"{msg.author} said {msg.content} in {msg.channel}:Music fun")
-
-                
-
-
-            if msg.content.startswith("?pause"):
-                try:
-                    voice_clients[msg.guild.id].pause()
-                except Exception as err:
-                    print(err)
-
-        # This resumes the current song playing if it's been paused
-            if msg.content.startswith("?resume"):
-                try:
-                    voice_clients[msg.guild.id].resume()
-                except Exception as err:
-                    print(err)
-
-        # This stops the current playing song
-            if msg.content.startswith("?stop"):
-                try:
-                    voice_clients[msg.guild.id].stop()
-                    await voice_clients[msg.guild.id].disconnect()
-                except Exception as err:
-                    print(err)     
-    """ 
     async def on_message(message):                                                                      #triggers this function when a message is sent
         if message.author == client.user:                                                               #makes it so the bot doesnt try to respond to its own message
             return
@@ -114,7 +112,7 @@ def run_discord_bot():
             usermessage = usermessage[1:]
             await send_message(message, usermessage, isprivate=True)
         else:
-            await send_message(message, usermessage, isprivate=False) """
+            await send_message(message, usermessage, isprivate=False)
             
     client.run(TOKEN)
 
