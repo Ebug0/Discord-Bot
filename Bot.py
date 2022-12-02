@@ -48,33 +48,35 @@ def run_discord_bot():
     async def on_ready():                                                                               #when the bot is started up it shows us a message in console
         print(f"{client.user} is now running")
 
-    @client.event
+    @client.slash_command(name = "start_music", description = "Starts the music bot with the given youtube URL")
+    @option("url", description = "Enter in the videos url here", required = True)
+    async def start_music(ctx: discord.ApplicationContext, url: str):
+        try:
+            voice_client = await ctx.author.voice.channel.connect()
+            voice_clients[voice_client.guild.id] = voice_client
+        except:
+            print("error")
+
+        try:
+            
+
+            loop = asyncio.get_event_loop()
+            data = await loop.run_in_executor(None, lambda: ytdl.extract_info(url, download=False))
+
+            song = data['url']
+            player = discord.FFmpegPCMAudio(song, **ffmpeg_options)
+
+            voice_clients[ctx.guild.id].play(player)
+
+        except Exception as err:
+            print(err)
 
 
     @client.event
     async def on_message(msg):
             print(f"{msg.author} said {msg.content} in {msg.channel}:Music fun")
-            if msg.content.startswith("?play"):
 
-                try:
-                    voice_client = await msg.author.voice.channel.connect()
-                    voice_clients[voice_client.guild.id] = voice_client
-                except:
-                    print("error")
-
-                try:
-                    url = msg.content.split()[1]
-
-                    loop = asyncio.get_event_loop()
-                    data = await loop.run_in_executor(None, lambda: ytdl.extract_info(url, download=False))
-
-                    song = data['url']
-                    player = discord.FFmpegPCMAudio(song, **ffmpeg_options)
-
-                    voice_clients[msg.guild.id].play(player)
-
-                except Exception as err:
-                    print(err)
+                
 
 
             if msg.content.startswith("?pause"):
