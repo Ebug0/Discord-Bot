@@ -22,14 +22,17 @@ class MyView(View):
 
     @discord.ui.button(label = "Click to Start", style = discord.ButtonStyle.red, custom_id = "start")
     async def danger_button_callback (self, button, interaction):
-
-        if self.mafchoosen == True and len(self.players_name) > 2:
+        if len(self.players_name) <= 2 + self.mafnumber and self.mafnumber != 0:
+                await interaction.response.send_message(f"You need at least {2+self.mafnumber} people to play")
+                return
+        if self.mafchoosen == True:            
             await interaction.response.edit_message (content = f"the Game has started with {self.players_name}", view = None)
             await newmain(self.mafnumber, self.players_name, self.player_id, self.ctx)
             self.value = "started"
             self.stop()
         else:
             await interaction.response.send_message (content = "Please pick the number of mafia")
+            return
         
     @discord.ui.button(label = "Click for 1 mafia", style = discord.ButtonStyle.grey, custom_id = "maf1")
     async def maf1_button_callback (self, button, interaction):
