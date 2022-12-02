@@ -11,7 +11,7 @@ import asyncio
 import youtube_dl
 import time
 
-loop = False
+loopmusic = False
 
 async def send_message(message, usermessage, isprivate):
     try:
@@ -53,6 +53,7 @@ def run_discord_bot():
     @client.slash_command(name = "start_music", description = "Starts the music bot with the given youtube URL")
     @option("url", description = "Enter in the videos url here", required = True)
     async def start_music(ctx: discord.ApplicationContext, url: str):
+        global loopmusic
         try:
             voice_client = await ctx.author.voice.channel.connect()
             voice_clients[voice_client.guild.id] = voice_client
@@ -68,7 +69,7 @@ def run_discord_bot():
 
             voice_clients[ctx.guild.id].play(player)
 
-            while loop == True:
+            while loopmusic == True:
                 voice_clients[ctx.guild.id].play(player)
 
             await ctx.respond(f"{ctx.author} started playing {url}")
@@ -77,12 +78,12 @@ def run_discord_bot():
     
     @client.slash_command(name = "looptoggle", description = "toggles between looping and not looping current song")
     async def loop_music(ctx):
-        global loop
-        if loop == False:
-            loop = True
+        global loopmusic
+        if loopmusic == False:
+            loopmusic = True
             await ctx.respond(f"{ctx.author} started looping the current song")
         else: 
-            loop = False
+            loopmusic = False
             await ctx.respond(f"{ctx.author} stopped looping the current song")
     
     @client.slash_command(name = "pause", description = "Pauses the current song")
@@ -105,9 +106,9 @@ def run_discord_bot():
         
     @client.slash_command(name = "stop", description = "Stops the music and make the bot leave the call")
     async def stop_music(ctx):
-        global loop
+        global loopmusic
         try:
-            loop == False
+            loopmusic = False
             voice_clients[ctx.guild.id].resume()
             await voice_clients[ctx.guild.id].disconnect()
             await ctx.respond(f"{ctx.author} stopped the music") 
