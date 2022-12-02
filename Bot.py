@@ -38,8 +38,7 @@ def run_discord_bot():
     @client.slash_command(name='greet', description='Greet someone!')
     @option("name", description="Enter your friend's name",required=False,default = None)
     async def greet(ctx: discord.ApplicationContext,name: str):
-        test = client.get_user(name)
-        await ctx.respond(f"Hello {test}!") 
+        await ctx.respond(f"Hello {name}!") 
     
     @client.command()
     async def start_mafia_game (ctx):
@@ -115,7 +114,7 @@ def run_discord_bot():
         except Exception as err:
             await ctx.resond("No music playing")
             print(err)      
-    """ 
+     
     @client.event
     async def on_message(message):                                                                      #triggers this function when a message is sent
         if message.author == client.user:                                                               #makes it so the bot doesnt try to respond to its own message
@@ -131,7 +130,7 @@ def run_discord_bot():
             usermessage = usermessage[1:]
             await send_message(message, usermessage, isprivate=True)
         else:
-            await send_message(message, usermessage, isprivate=False) """
+            await send_message(message, usermessage, isprivate=False)
             
     client.run(TOKEN)
 

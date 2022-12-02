@@ -284,7 +284,7 @@ async def newmain(mafcount, playerlist, playerid, ctxx):
     await playervote(playerdict,playerlist) """
     
 
-    win = True #keep True untill full testing
+    win = False #keep True untill full testing
     while win == False:
         alive = []                                                       #Make a list for everyone who is alive
         deadmafia = []
@@ -342,7 +342,7 @@ async def newmain(mafcount, playerlist, playerid, ctxx):
         print(playerdict[i].display())
     print("DONE") 
     loop = asyncio.get_running_loop()
-    loop.close()
+    loop.end() #returns error but stops the bot from dying :shurg:
     
     client.run(TOKEN)
 

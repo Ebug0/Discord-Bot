@@ -23,7 +23,7 @@ class MyView(View):
     @discord.ui.button(label = "Click to Start", style = discord.ButtonStyle.red, custom_id = "start")
     async def danger_button_callback (self, button, interaction):
 
-        if self.mafchoosen == True and len(self.players_name) > 0:
+        if self.mafchoosen == True and len(self.players_name) > 2:
             await interaction.response.edit_message (content = f"the Game has started with {self.players_name}", view = None)
             await newmain(self.mafnumber, self.players_name, self.player_id, self.ctx)
             self.value = "started"
