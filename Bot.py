@@ -11,6 +11,8 @@ import asyncio
 import youtube_dl
 import time
 
+loop = False
+
 async def send_message(message, usermessage, isprivate):
     try:
         response = Responses.handle_response(usermessage, str(message.channel), str(message.author.id)) #send the message channle and who the author is to the Responses py file to process
@@ -65,9 +67,23 @@ def run_discord_bot():
             player = discord.FFmpegPCMAudio(song, **ffmpeg_options, executable = "C:\\FFMPEG\\ffmpeg.exe")
 
             voice_clients[ctx.guild.id].play(player)
-            await ctx.respond(f"{ctx.author} started {url}")
+
+            while loop == True:
+                voice_clients[ctx.guild.id].play(player)
+
+            await ctx.respond(f"{ctx.author} started playing {url}")
         except Exception as err:
             print(err)
+    
+    @client.slash_command(name = "looptoggle", description = "toggles between looping and not looping current song")
+    async def loop_music(ctx):
+        global loop
+        if loop == False:
+            loop = True
+            await ctx.respond(f"{ctx.author} started looping the current song")
+        else: 
+            loop = False
+            await ctx.respond(f"{ctx.author} stopped looping the current song")
     
     @client.slash_command(name = "pause", description = "Pauses the current song")
     async def pause_music(ctx: discord.ApplicationContext):
@@ -89,14 +105,16 @@ def run_discord_bot():
         
     @client.slash_command(name = "stop", description = "Stops the music and make the bot leave the call")
     async def stop_music(ctx):
+        global loop
         try:
+            loop == False
             voice_clients[ctx.guild.id].resume()
             await voice_clients[ctx.guild.id].disconnect()
-            await ctx.respond(f"{ctx.author} stopped the music")
+            await ctx.respond(f"{ctx.author} stopped the music") 
         except Exception as err:
             await ctx.resond("No music playing")
             print(err)      
-
+    """ 
     @client.event
     async def on_message(message):                                                                      #triggers this function when a message is sent
         if message.author == client.user:                                                               #makes it so the bot doesnt try to respond to its own message
@@ -112,7 +130,7 @@ def run_discord_bot():
             usermessage = usermessage[1:]
             await send_message(message, usermessage, isprivate=True)
         else:
-            await send_message(message, usermessage, isprivate=False)
+            await send_message(message, usermessage, isprivate=False) """
             
     client.run(TOKEN)
 

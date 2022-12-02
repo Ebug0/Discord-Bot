@@ -30,7 +30,7 @@ async def mafiachooser(playerlist, playerdict, mafcount):
         while chance in mafnumbers:                                                                     #if that index is already taken by then it randomly creates another one until its not in the list
             chance = random.randint(0,len(playerlist)-1)
         mafnumbers.append(chance)                                                                       #adds the index to list of mafia for call back later
-        await send_message( f"You have been picked as a mafia!", playerdict[playerlist[i]].id, True)
+        await send_message( f"You have been picked as a mafia!", playerdict[playerlist[chance]].id, True)
         playerdict[playerlist[chance]].changerole("mafia")                                              #changes a players role to mafia 
     
     return mafnumbers 
@@ -64,7 +64,7 @@ async def mafiaturn(mafnumber,playerdict,playerlist):
             await send_message(f"Each mafia member will vote seperatly in case of a tie it will be random\nmake sure to talk to your fellow mafia members via dm \
             your fellow mafia members are {playerlist[0]}, {playerlist[1]} and {playerlist[2]}", playerdict[playerlist[i]])
         else:
-            await send_message("Your a lone mafia good luck", playerdict[playerlist[i]])
+            await send_message("Your a lone mafia good luck", playerdict[playerlist[i]].id)
     for i in mafnumber:
         if playerdict[playerlist[i]].status == "dead":
             await send_message("You are dead and can not act", playerdict[playerlist[i]].id)
@@ -92,7 +92,7 @@ async def mafiaturn(mafnumber,playerdict,playerlist):
                 await send_message("A mafia sent a non number vote this round and their vote is forfit")
                 break
             
-            if killchoice in mafnumber or killchoice >= len(playerlist)-1 or killchoice < 0:                #makes sure they don't enter an invalid answer and if they do forfit it
+            if killchoice in mafnumber or killchoice > len(playerlist)-1 or killchoice < 0:                #makes sure they don't enter an invalid answer and if they do forfit it
                 await send_message("A mafia sent an invalid choice for their vote. Dumbass")
             else:
                 playerdict[playerlist[killchoice]].changevote(1,False)                                      #adds one to the vote for the player they which to kill
@@ -125,7 +125,7 @@ async def doctorturn(docnumber, playerdict, playerlist):
     print("got past messages")
     
 
-    if savechoice >= len(playerlist)-1 or savechoice < 0:
+    if savechoice > len(playerlist)-1 or savechoice < 0:
         await send_message("the Doctor entered an invalid choice and their save is forfit")
     else:
         playerdict[playerlist[savechoice]].changesafe("safe")
@@ -136,17 +136,16 @@ async def sherifturn(sherifnumber, playerdict, playerlist):
     await send_message(f"Sherif {playerlist[sherifnumber]} Please choose who you wish to investigate", playerdict[playerlist[sherifnumber]].id)
     for i in range (0,len(playerlist)):                                                                 #same as above except they are investigating a person to find out their role
         if i == sherifnumber:
-            await send_message("You can't invetegate yourself", playerdict[playerlist[sherifnumber]].id)
+            await send_message("You can't investgate yourself", playerdict[playerlist[sherifnumber]].id)
         elif playerdict[playerlist[i]].invest == True and playerdict[playerlist[i]].status == "alive":  #if the sherif already investagted them it lets them know what their role was
             await send_message(f"You already Investgated {playerlist[i]} and there role is {playerdict[playerlist[i]].role}", playerdict[playerlist[sherifnumber]].id)
-        elif playerdict[playerlist[i]] == "alive":
+        elif playerdict[playerlist[i]].status == "alive":
             await send_message(f"Name: {playerlist[i]} Enter {i} to investigate this person", playerdict[playerlist[sherifnumber]].id)
     
     investchoice = None
-    await send_message("Please enter who you want to kill", playerdict[playerlist[i]].id)
     await asyncio.sleep(0.5)
     def check(m):
-        return m.author == playerdict[playerlist[i]].id.user
+        return m.author == playerdict[playerlist[sherifnumber]].id.user
 
     message = await client.wait_for("message", check=check)
     print("got past for message")
@@ -156,7 +155,7 @@ async def sherifturn(sherifnumber, playerdict, playerlist):
         await send_message("The Sherif sent a non number choice this round and their investigation is forfit")
         return
     
-    if investchoice >= len(playerlist)-1 or investchoice < 0:
+    if investchoice > len(playerlist)-1 or investchoice < 0:
         await send_message(f"The sherif entered an invalid choice and wasted their investigation")
     else:
         await send_message(f"Name: {playerlist[investchoice]} There role is {playerdict[playerlist[investchoice]].role}", playerdict[playerlist[sherifnumber]].id)
@@ -175,18 +174,19 @@ async def playervote(playerdict,playerlist):                #This function allow
     await send_message("It's time to vote")
 
     for i in range(0,len(playerlist)):
-
-        await send_message(f"<@{playerdict[playerlist[i]].id.user.id}> Who do you wish to vote?")
+        if playerdict[playerlist[i]].status == "alive":
+            await send_message(f"<@{playerdict[playerlist[i]].id.user.id}> Who do you wish to vote?")
+        else:
+            break
 
         for o in range (0,len(playerlist)):
 
             if playerlist[i] == playerlist[o]:                                                               #This allows players to vote
                 await send_message("You can't vote yourself")
             elif playerdict[playerlist[o]].status == "alive":
-                await send_message(f"Name: {playerlist[o]} enter {o} to vote")
+                await send_message(f"Name: '{playerlist[o]}' enter {o} to vote for them")
 
         killchoice = None
-        await send_message("Please enter who you want to kill", playerdict[playerlist[i]].id)
         await asyncio.sleep(0.5)
 
         def check(m):
@@ -218,8 +218,9 @@ async def playervote(playerdict,playerlist):                #This function allow
             await send_message(playerlist[i])
     else:
         playerdict[playerlist[modelist[0]]].changestatus("dead")
+        await send_message(f"The person who died was {playerlist[modelist[0]]}")
 
-    await send_message("The votes were", votelist)
+    await send_message(f"The votes were {votelist}")
         
 async def endOfTurn(playerdict,playerlist):                     #This function ends the turn for the mafia players 
     votecount = []
@@ -229,8 +230,12 @@ async def endOfTurn(playerdict,playerlist):                     #This function e
         if playerdict[i].vote > 0:                              #If someone has a vote add them to a list 
             votecount.append(i)
     print(votecount)
-    if len(votecount) == 1 and playerdict[votecount[0]].safe != "safe": #If only one person gets a vote and the doctor doesn't save them then kill them
-        playerdict[votecount[0]].changestatus("dead")
+    if len(votecount) == 1: #If only one person gets a vote and the doctor doesn't save them then kill them
+        if playerdict[votecount[0]].safe != "safe":
+            playerdict[votecount[0]].changestatus("dead")
+            await send_message(f"Player {votecount[0]} has died from the mafia XD")
+        else:
+            await send_message(f"The doctor magned to save this {votecount[0]}...")
     elif len(votecount) == 0:
         await send_message("The Mafia is an idiot and tried to kill someone he couldn't")
         return
@@ -241,10 +246,10 @@ async def endOfTurn(playerdict,playerlist):                     #This function e
                     playerdict[i].changestatus("dead")
                     await send_message(f"{playerdict[i]} has died. :cry:")
                 else:
-                    await send_message("The doctor magned to save this one...")
+                    await send_message(f"The doctor magned to save this {votecount[i]}...")
             else:
                 tiebreaker =  random.randint(0,len(votecount)-1)         #This initiates the tiebreaker 
-                await send_message("The Mafia killed", tiebreaker, ":cry:")                   #The tie breaker is finished and tells the players who died
+                await send_message(f"The Mafia killed {playerdict[votecount[tiebreaker]]}:cry:")                   #The tie breaker is finished and tells the players who died
                 playerdict[votecount[tiebreaker]].changestatus("dead")  #This kills the loser of the tiebreaker
                 break
     for i in playerlist:                                                #This clears the votes
@@ -271,29 +276,29 @@ async def newmain(mafcount, playerlist, playerid, ctxx):
     for i in range (0, len(playerlist)):
         if i not in positionsnumber:                                                            
             playerdict[playerlist[i]].changerole("bystander")
-
+    """ 
     await mafiaturn(mafnumber, playerdict, playerlist)
     await doctorturn(docnumber, playerdict, playerlist)
     await sherifturn(sherifnumber, playerdict, playerlist)
-    await playervote(playerdict,playerlist)
     await endOfTurn(playerdict,playerlist)
+    await playervote(playerdict,playerlist) """
+    
 
     win = True #keep True untill full testing
     while win == False:
         alive = []                                                       #Make a list for everyone who is alive
         deadmafia = []
+        
+        await mafiaturn(mafnumber, playerdict, playerlist)                    #These three run the rest of the game
 
         if playerdict[playerlist[docnumber]].status == "alive":        #This makes it so if the doctor is alive then he can use his turn
-            doctorturn(docnumber, playerdict, playerlist)
+            await doctorturn(docnumber, playerdict, playerlist)
 
         if playerdict[playerlist[sherifnumber]].status == "alive":     #Same thing above, if sherriff is alive, he can use his turn
-            sherifturn(sherifnumber, playerdict, playerlist)
+            await sherifturn(sherifnumber, playerdict, playerlist)
 
-        mafiaturn(mafnumber, playerdict, playerlist)                    #These three run the rest of the game 
-        endOfTurn(playerdict,playerlist)
-        playervote(playerdict,playerlist)
-        
-            
+        await endOfTurn(playerdict,playerlist)
+
         for i in playerlist:
             if playerdict[i].status == ("alive"):
                 alive.append(i)
@@ -303,19 +308,42 @@ async def newmain(mafcount, playerlist, playerid, ctxx):
                 alive.remove(playerlist[i])
             else:
                 deadmafia.append(i)
-             
+
         if  len(alive) == 0:   
-            print("The Mafia Won!")
+            await send_message("The Mafia Won! and the night has ended")
             win = True
+
+
+        await playervote(playerdict,playerlist)
+        alive.clear()
+        deadmafia.clear()
         
+        for i in playerlist:
+            if playerdict[i].status == ("alive"):
+                alive.append(i)
+        
+        for i in mafnumber:
+            if playerdict[playerlist[i]].status == "alive":
+                alive.remove(playerlist[i])
+            else:
+                deadmafia.append(i)
+
+        if  len(alive) == 0:   
+            await send_message("The Mafia Won! and the night has ended")
+            win = True
+
+
         if len(deadmafia) == len(mafnumber):
-            print("The Players Won!")
+            await send_message("The Players Won! and the night has ended")
             win = True
 
     
     for i in playerlist:                                                                        #just to help debug which objects have which values at the end of game (dev only)
         print(playerdict[i].display())
-    count = input("done with loop")
+    print("DONE") 
+    loop = asyncio.get_running_loop()
+    loop.close()
+    
     client.run(TOKEN)
 
 def main():
