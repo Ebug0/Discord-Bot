@@ -15,8 +15,10 @@ def handle_response(message, channel, author) -> str:
     if channel != "ebot-haven":                                   #checks to see if the same thing is said twice and if so send that message in the channel
         if CheckPastMessage.callpastmessage() == pmessage and CheckPastMessage.checkdupmessage(CheckPastMessage.callpastmessage()): 
             gifcheck = CheckPastMessage.callpastmessage()
-            if gifcheck[:4] == "https":
-                return "No Gifs"
+            if gifcheck[:5] == "https":
+                return
+            if gifcheck[0] == "<":
+                return
             else:
                 CheckPastMessage.storedupmessage(pmessage)
                 return CheckPastMessage.callpastmessage()
