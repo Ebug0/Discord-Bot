@@ -32,13 +32,16 @@ def handle_response(message, channel, author) -> str:
         if pmessage == "roll":
             chance = random.randint(1,6)
             return chance
+
+    if pmessage == "67":
+            return "67"    
     
         if pmessage == 'help':
             return "`Help - Gives a list of commands and uses\nPut a ! before the command to have the answer DMed to you\nSpinner - gives 1 of 8 random reasons why mado didn't go to school \
                 \nroll - Rolls a 6 sided die for you`"
     
         if pmessage == "spinner":
-            chance = random.randint(1,12)
+            chance = random.randint(1,16)
             if chance == 1:
                 return "Mado was a little tired today :cry:"
             elif chance == 2:
@@ -63,3 +66,12 @@ def handle_response(message, channel, author) -> str:
                 return "Mado had to go buy a bike today"
             elif chance == 12:
                 return "Mado didn't have a choice"
+            elif chance == 13:
+                return "Mado had to cut his hamburger!"
+            elif chance == 14:
+                return "James rubbed peanut butter on Mado!"
+            elif chance == 15:
+                return "Mado stayed on TikTok!"
+            elif chance == 16:
+                return "Mado hit a deer!"
+                
