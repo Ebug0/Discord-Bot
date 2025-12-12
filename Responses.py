@@ -33,7 +33,7 @@ def handle_response(message, channel, author) -> str:
             chance = random.randint(1,6)
             return chance
 
-    if pmessage == "67":
+        if pmessage == "67":
             return "67"    
     
         if pmessage == 'help':
