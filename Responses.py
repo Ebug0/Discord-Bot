@@ -1,5 +1,10 @@
 import random
 import CheckPastMessage
+import time
+from collections import defaultdict
+
+# Rate limiting for 67 command
+command_67_cooldowns = defaultdict(float)
 
 def handle_response(message, channel, author) -> str:
     pmessage = message.lower()                                    #makes the message all lowercase characters for comparision
@@ -34,6 +39,11 @@ def handle_response(message, channel, author) -> str:
             return chance
 
         if pmessage == "67":
+            current_time = time.time()
+            last_used = command_67_cooldowns[author]
+            if current_time - last_used < 1:  # 1 second cooldown
+                return  # Silently ignore if rate limited
+            command_67_cooldowns[author] = current_time
             return "67"    
     
         if pmessage == 'help':
