@@ -7,10 +7,10 @@ def handle_response(message, channel, author) -> str:
     if pmessage == "cum":
         return "Ben said that was a no no word"
 
-    if author == "190245035567087626" and pmessage == "spinner":  #if james uses the spinner command it "breaks" on him and only display one value
+    if author == "190245035567087626":  #give james a random chance to get a nice message :)
         chance = random.randint(0,200)
         if chance == 100:
-            return "James maybe you should take a break from the spinner command"
+            return "Hi James hope your having a great day!"
 
     if channel != "ebot-haven" or channel == "ebot-christmas-tree":                                   #checks to see if the same thing is said twice and if so send that message in the channel
         if CheckPastMessage.callpastmessage() == pmessage and CheckPastMessage.checkdupmessage(CheckPastMessage.callpastmessage()): 
