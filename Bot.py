@@ -8,7 +8,7 @@ from ButtonClasses import MyView
 from Token import TOKEN #Hides the bot token from github
 import os
 import asyncio
-import youtube_dl
+import yt_dlp
 import time
 
 loopmusic = False
@@ -24,7 +24,7 @@ def run_discord_bot():
     voice_clients = {}
 
     yt_dl_opts = {'format': 'bestaudio/best'}
-    ytdl = youtube_dl.YoutubeDL(yt_dl_opts)
+    ytdl = yt_dlp.YoutubeDL(yt_dl_opts)
 
     ffmpeg_options = {'options': "-vn"}
 
@@ -100,7 +100,7 @@ def run_discord_bot():
             voice_clients[ctx.guild.id].resume()
             await ctx.respond(f"{ctx.author} resumed the music")
         except Exception as err:
-            await ctx.resond("No music playing")
+            await ctx.respond("No music playing")
             print(err)
         
     @client.slash_command(name = "stop", description = "Stops the music and make the bot leave the call")
@@ -112,7 +112,7 @@ def run_discord_bot():
             await voice_clients[ctx.guild.id].disconnect()
             await ctx.respond(f"{ctx.author} stopped the music") 
         except Exception as err:
-            await ctx.resond("No music playing")
+            await ctx.respond("No music playing")
             print(err)      
      
     @client.event
