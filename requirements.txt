@@ -1,9 +1,6 @@
 # Discord Bot Dependencies
 # Discord library - Py-cord (fork of discord.py with slash command support)
-py-cord[voice]>=2.6.0
-
-# YouTube audio extraction (replacement for deprecated youtube_dl)
-yt-dlp>=2024.0.0
+py-cord>=2.6.0
 
 # Standard library modules used (no installation needed):
 # - os

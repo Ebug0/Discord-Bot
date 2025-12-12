@@ -8,10 +8,7 @@ from ButtonClasses import MyView
 from Token import TOKEN #Hides the bot token from github
 import os
 import asyncio
-import yt_dlp
 import time
-
-loopmusic = False
 
 async def send_message(message, usermessage, isprivate):
     try:
@@ -21,13 +18,6 @@ async def send_message(message, usermessage, isprivate):
         print(e)
 
 def run_discord_bot():
-    voice_clients = {}
-
-    yt_dl_opts = {'format': 'bestaudio/best'}
-    ytdl = yt_dlp.YoutubeDL(yt_dl_opts)
-
-    ffmpeg_options = {'options': "-vn"}
-
      
     @client.slash_command(name='print', description='print whats given')
     @option("print here1", description="Enter in a thing to print",required=False,default = None)
@@ -48,72 +38,6 @@ def run_discord_bot():
     @client.event
     async def on_ready():                                                                               #when the bot is started up it shows us a message in console
         print(f"{client.user} is now running")
-
-    @client.slash_command(name = "start_music", description = "Starts the music bot with the given youtube URL")
-    @option("url", description = "Enter in the videos url here", required = True)
-    async def start_music(ctx: discord.ApplicationContext, url: str):
-        global loopmusic
-        try:
-            voice_client = await ctx.author.voice.channel.connect()
-            voice_clients[voice_client.guild.id] = voice_client
-        except Exception as err:
-            print(err)
-
-        try:
-            loop = asyncio.get_event_loop()
-            data = await loop.run_in_executor(None, lambda: ytdl.extract_info(url, download=False))
-
-            song = data['url']
-            player = discord.FFmpegPCMAudio(song, **ffmpeg_options, executable = "C:\\FFMPEG\\ffmpeg.exe")
-
-            voice_clients[ctx.guild.id].play(player)
-
-            while loopmusic == True:
-                voice_clients[ctx.guild.id].play(player)
-
-            await ctx.respond(f"{ctx.author} started playing {url}")
-        except Exception as err:
-            print(err)
-    
-    @client.slash_command(name = "looptoggle", description = "toggles between looping and not looping current song")
-    async def loop_music(ctx):
-        global loopmusic
-        if loopmusic == False:
-            loopmusic = True
-            await ctx.respond(f"{ctx.author} started looping the current song")
-        else: 
-            loopmusic = False
-            await ctx.respond(f"{ctx.author} stopped looping the current song")
-    
-    @client.slash_command(name = "pause", description = "Pauses the current song")
-    async def pause_music(ctx: discord.ApplicationContext):
-        try:
-            voice_clients[ctx.guild.id].pause()
-            await ctx.respond(f"{ctx.author} paused the music")
-        except Exception as err:
-            await ctx.respond("No music playing")
-            print(err)
-
-    @client.slash_command(name = "resume", description = "resumes the current music")
-    async def resume_music(ctx):
-        try:
-            voice_clients[ctx.guild.id].resume()
-            await ctx.respond(f"{ctx.author} resumed the music")
-        except Exception as err:
-            await ctx.respond("No music playing")
-            print(err)
-        
-    @client.slash_command(name = "stop", description = "Stops the music and make the bot leave the call")
-    async def stop_music(ctx):
-        global loopmusic
-        try:
-            loopmusic = False
-            voice_clients[ctx.guild.id].resume()
-            await voice_clients[ctx.guild.id].disconnect()
-            await ctx.respond(f"{ctx.author} stopped the music") 
-        except Exception as err:
-            await ctx.respond("No music playing")
-            print(err)      
      
     @client.event
     async def on_message(message):                                                                      #triggers this function when a message is sent
