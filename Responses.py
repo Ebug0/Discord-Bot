@@ -27,7 +27,7 @@ def handle_response(message, channel, author) -> str:
 
     if channel == "ebot-haven" or channel == "ebot-christmas-tree":                                   #makes the text commands only work in the desginated channel (ebot-haven)
         if pmessage == "hello":
-            return "ebot says your a bitch"
+            return "ebot says you're a bitch"
     
         if pmessage == "roll":
             chance = random.randint(1,6)
