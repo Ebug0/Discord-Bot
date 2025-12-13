@@ -17,7 +17,7 @@ def handle_response(message, channel, author) -> str:
         if chance == 100:
             return "Hi James hope your having a great day!"
 
-    if channel != "ebot-haven" or channel != "ebot-christmas-tree":                                   #checks to see if the same thing is said twice and if so send that message in the channel
+    if "ebot" not in channel:                                   #checks to see if the same thing is said twice and if so send that message in the channel
         if CheckPastMessage.callpastmessage() == pmessage and CheckPastMessage.checkdupmessage(CheckPastMessage.callpastmessage()): 
             gifcheck = CheckPastMessage.callpastmessage()
             if gifcheck[:5] == "https":
@@ -30,7 +30,7 @@ def handle_response(message, channel, author) -> str:
         else:
             CheckPastMessage.storepastmessage(pmessage)
 
-    if channel == "ebot-haven" or channel == "ebot-christmas-tree":                                   #makes the text commands only work in the desginated channel (ebot-haven)
+    if "ebot" in channel:                                   #makes the text commands only work in the desginated channel (ebot-haven)
         if pmessage == "hello":
             return "ebot says you're a bitch"
     
