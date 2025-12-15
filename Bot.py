@@ -48,11 +48,26 @@ def run_discord_bot():
             await ctx.respond("No one has said '67' yet!")
             return
         
-        # Format leaderboard message
+        # Format leaderboard message with server nicknames
         leaderboard_text = "🏆 67 Leaderboard:\n"
+        guild = ctx.guild
         for i, (user_id, count, username) in enumerate(leaderboard_data, 1):
-            # Use username if available, otherwise use user ID
-            display_name = username if username else f"User {user_id}"
+            # Try to get member from guild to show server nickname
+            display_name = f"User {user_id}"  # Default fallback
+            if guild:
+                try:
+                    member = guild.get_member(int(user_id))
+                    if member:
+                        # display_name shows server nickname if they have one, otherwise username
+                        display_name = member.display_name
+                    else:
+                        # Member not found in guild, use stored username
+                        display_name = username if username else f"User {user_id}"
+                except (ValueError, AttributeError):
+                    display_name = username if username else f"User {user_id}"
+            else:
+                display_name = username if username else f"User {user_id}"
+            
             leaderboard_text += f"{i}. {display_name} - {count} time{'s' if count != 1 else ''}\n"
         
         await ctx.respond(leaderboard_text)
@@ -112,11 +127,30 @@ def run_discord_bot():
         if not leaderboard_data:
             return  # No one has said 67 yet
         
-        # Format leaderboard with pings
+        # Get guild from channel to fetch server nicknames
+        guild = channel.guild if hasattr(channel, 'guild') else None
+        
+        # Format leaderboard with pings and server nicknames
         leaderboard_text = "🏆 Daily 67 Leaderboard (Top 10):\n"
         for i, (user_id, count, username) in enumerate(leaderboard_data, 1):
             ping_format = f"<@{user_id}>"
-            leaderboard_text += f"{i}. {ping_format} - {count} time{'s' if count != 1 else ''}\n"
+            # Try to get server nickname
+            display_name = ""
+            if guild:
+                try:
+                    member = guild.get_member(int(user_id))
+                    if member:
+                        # display_name shows server nickname if they have one, otherwise username
+                        display_name = member.display_name
+                    else:
+                        # Member not found, use stored username as fallback
+                        display_name = username if username else f"User {user_id}"
+                except (ValueError, AttributeError):
+                    display_name = username if username else f"User {user_id}"
+            else:
+                display_name = username if username else f"User {user_id}"
+            
+            leaderboard_text += f"{i}. {ping_format} ({display_name}) - {count} time{'s' if count != 1 else ''}\n"
         
         try:
             await channel.send(leaderboard_text)
