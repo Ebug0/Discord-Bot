@@ -33,7 +33,7 @@ def run_discord_bot():
     async def greet(ctx: discord.ApplicationContext,name: str):
         await ctx.respond(f"Hello {name}!") 
     
-    @client.slash_command(name='67_leaderboard_ping_toggle', description='Toggle whether you will be pinged in the 67 leaderboard',  guild_ids=Config.GUILD_IDS if Config.GUILD_IDS else Non)
+    @client.slash_command(name='67_leaderboard_ping_toggle', description='Toggle whether you will be pinged in the 67 leaderboard',  guild_ids=Config.GUILD_IDS if Config.GUILD_IDS else None)
     async def leaderboard_ping_toggle(ctx: discord.ApplicationContext):
         """Allow users to toggle their ping preference for the leaderboard"""
         user_id_str = str(ctx.author.id)
@@ -62,7 +62,7 @@ def run_discord_bot():
             return
         
         # Format leaderboard message with server nicknames and pings
-        leaderboard_text = "🏆 67 Leaderboard:\n"
+        leaderboard_text = "🏆 67 Leaderboard (use /ping toggle to not get pinged)\n=============================="
         guild = ctx.guild
         for i, (user_id, count, username, ping_enabled) in enumerate(leaderboard_data, 1):
             # Try to get member from guild to show server nickname and general display name
