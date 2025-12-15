@@ -4,6 +4,12 @@
 # List of user IDs (as strings) who can use the /leaderboard command
 ALLOWED_LEADERBOARD_USERS = ["195618400796409856"]
 
+# Guild IDs (server IDs) where slash commands should be registered immediately
+# Add your server ID(s) here as integers to make commands appear instantly
+# To find your server ID: Right-click server > Server Settings > Widget > Server ID (enable Developer Mode first)
+# Leave as empty list [] to register commands globally (can take up to 1 hour to appear)
+GUILD_IDS = []  # Example: [123456789012345678, 987654321098765432]
+
 # Channel ID where daily leaderboard posts (as integer or None to use channel name)
 # If None, will use channel name "ebot-haven"
 LEADERBOARD_CHANNEL_ID = None  # Set to channel ID (integer) or None for channel name
