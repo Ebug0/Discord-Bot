@@ -48,10 +48,10 @@ def run_discord_bot():
             await ctx.respond("No one has said '67' yet!")
             return
         
-        # Format leaderboard message with server nicknames
+        # Format leaderboard message with server nicknames and pings
         leaderboard_text = "🏆 67 Leaderboard:\n"
         guild = ctx.guild
-        for i, (user_id, count, username) in enumerate(leaderboard_data, 1):
+        for i, (user_id, count, username, ping_enabled) in enumerate(leaderboard_data, 1):
             # Try to get member from guild to show server nickname
             display_name = f"User {user_id}"  # Default fallback
             if guild:
@@ -68,7 +68,12 @@ def run_discord_bot():
             else:
                 display_name = username if username else f"User {user_id}"
             
-            leaderboard_text += f"{i}. {display_name} - {count} time{'s' if count != 1 else ''}\n"
+            # Add ping if enabled, otherwise just show name
+            if ping_enabled:
+                ping_format = f"<@{user_id}>"
+                leaderboard_text += f"{i}. {ping_format} ({display_name}) - {count} time{'s' if count != 1 else ''}\n"
+            else:
+                leaderboard_text += f"{i}. {display_name} - {count} time{'s' if count != 1 else ''}\n"
         
         await ctx.respond(leaderboard_text)
     
@@ -132,8 +137,7 @@ def run_discord_bot():
         
         # Format leaderboard with pings and server nicknames
         leaderboard_text = "🏆 Daily 67 Leaderboard (Top 10):\n"
-        for i, (user_id, count, username) in enumerate(leaderboard_data, 1):
-            ping_format = f"<@{user_id}>"
+        for i, (user_id, count, username, ping_enabled) in enumerate(leaderboard_data, 1):
             # Try to get server nickname
             display_name = ""
             if guild:
@@ -150,7 +154,12 @@ def run_discord_bot():
             else:
                 display_name = username if username else f"User {user_id}"
             
-            leaderboard_text += f"{i}. {ping_format} ({display_name}) - {count} time{'s' if count != 1 else ''}\n"
+            # Add ping if enabled, otherwise just show name
+            if ping_enabled:
+                ping_format = f"<@{user_id}>"
+                leaderboard_text += f"{i}. {ping_format} ({display_name}) - {count} time{'s' if count != 1 else ''}\n"
+            else:
+                leaderboard_text += f"{i}. {display_name} - {count} time{'s' if count != 1 else ''}\n"
         
         try:
             await channel.send(leaderboard_text)
