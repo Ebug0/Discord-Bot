@@ -2,11 +2,12 @@ import random
 import CheckPastMessage
 import time
 from collections import defaultdict
+import Scoreboard
 
 # Rate limiting for 67 command
 command_67_cooldowns = defaultdict(float)
 
-def handle_response(message, channel, author) -> str:
+def handle_response(message, channel, author, username=None) -> str:
     pmessage = message.lower()                                    #makes the message all lowercase characters for comparision
 
     if pmessage == "cum":
@@ -44,6 +45,9 @@ def handle_response(message, channel, author) -> str:
             if current_time - last_used < 1:  # 1 second cooldown
                 return  # Silently ignore if rate limited
             command_67_cooldowns[author] = current_time
+            # Track scoreboard count
+            if username:
+                Scoreboard.increment_count(author, username)
             return "67"    
     
         if pmessage == 'help':
