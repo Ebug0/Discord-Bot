@@ -33,7 +33,7 @@ def run_discord_bot():
     async def greet(ctx: discord.ApplicationContext,name: str):
         await ctx.respond(f"Hello {name}!") 
     
-    @client.slash_command(name='leaderboard', description='View the 67 leaderboard (restricted)')
+    @client.slash_command(name='leaderboard', description='View the 67 leaderboard (restricted)', guild_ids=Config.GUILD_IDS if Config.GUILD_IDS else None)
     async def leaderboard(ctx: discord.ApplicationContext):
         # Check if user is authorized
         user_id_str = str(ctx.author.id)
@@ -67,6 +67,20 @@ def run_discord_bot():
         print(f"{client.user} is now running")
         # Load scoreboard data
         Scoreboard.load_data()
+        # Sync slash commands to make them appear immediately
+        # This helps ensure commands are registered even if guild_ids wasn't set
+        try:
+            if Config.GUILD_IDS:
+                # Sync to specific guilds
+                for guild_id in Config.GUILD_IDS:
+                    await client.sync_commands(guild_ids=[guild_id])
+                print(f"Synced commands to {len(Config.GUILD_IDS)} guild(s)")
+            else:
+                # Sync globally (can take up to 1 hour to appear)
+                await client.sync_commands()
+                print("Synced commands globally (may take up to 1 hour to appear)")
+        except Exception as e:
+            print(f"Error syncing commands: {e}")
         # Start daily leaderboard task
         if not daily_leaderboard_task.is_running():
             daily_leaderboard_task.start()
