@@ -33,6 +33,19 @@ def run_discord_bot():
     async def greet(ctx: discord.ApplicationContext,name: str):
         await ctx.respond(f"Hello {name}!") 
     
+    @client.slash_command(name='67_leaderboard_ping_toggle', description='Toggle whether you will be pinged in the 67 leaderboard',  guild_ids=Config.GUILD_IDS if Config.GUILD_IDS else Non)
+    async def leaderboard_ping_toggle(ctx: discord.ApplicationContext):
+        """Allow users to toggle their ping preference for the leaderboard"""
+        user_id_str = str(ctx.author.id)
+        current_preference = Scoreboard.get_ping_preference(user_id_str)
+        new_preference = not current_preference
+        
+        # Set the new preference
+        Scoreboard.set_ping_preference(user_id_str, new_preference)
+        
+        status = "enabled" if new_preference else "disabled"
+        await ctx.respond(f"Your ping preference has been {status}. You will {'be pinged' if new_preference else 'not be pinged'} when the leaderboard is posted.", ephemeral=True)
+    
     @client.slash_command(name='leaderboard', description='View the 67 leaderboard (restricted)', guild_ids=Config.GUILD_IDS if Config.GUILD_IDS else None)
     async def leaderboard(ctx: discord.ApplicationContext):
         # Check if user is authorized
@@ -52,28 +65,36 @@ def run_discord_bot():
         leaderboard_text = "🏆 67 Leaderboard:\n"
         guild = ctx.guild
         for i, (user_id, count, username, ping_enabled) in enumerate(leaderboard_data, 1):
-            # Try to get member from guild to show server nickname
-            display_name = f"User {user_id}"  # Default fallback
+            # Try to get member from guild to show server nickname and general display name
+            server_nickname = f"User {user_id}"  # Default fallback
+            general_display_name = username if username else f"User {user_id}"  # Default fallback
+            
             if guild:
                 try:
                     member = guild.get_member(int(user_id))
                     if member:
-                        # display_name shows server nickname if they have one, otherwise username
-                        display_name = member.display_name
+                        # Server nickname (display_name shows server nickname if they have one, otherwise username)
+                        server_nickname = member.display_name
+                        # General Discord display name (global_name or name)
+                        general_display_name = member.global_name if member.global_name else member.name
                     else:
                         # Member not found in guild, use stored username
-                        display_name = username if username else f"User {user_id}"
+                        server_nickname = username if username else f"User {user_id}"
+                        general_display_name = username if username else f"User {user_id}"
                 except (ValueError, AttributeError):
-                    display_name = username if username else f"User {user_id}"
+                    server_nickname = username if username else f"User {user_id}"
+                    general_display_name = username if username else f"User {user_id}"
             else:
-                display_name = username if username else f"User {user_id}"
+                server_nickname = username if username else f"User {user_id}"
+                general_display_name = username if username else f"User {user_id}"
             
-            # Add ping if enabled, otherwise just show name
+            # Format: If ping enabled: <@user_id> (general discord display name) - x times
+            # Format: If ping disabled: Server nickname (general discord display name) - x times
             if ping_enabled:
                 ping_format = f"<@{user_id}>"
-                leaderboard_text += f"{i}. {ping_format} ({display_name}) - {count} time{'s' if count != 1 else ''}\n"
+                leaderboard_text += f"{i}. {ping_format} ({general_display_name}) - {count} time{'s' if count != 1 else ''}\n"
             else:
-                leaderboard_text += f"{i}. {display_name} - {count} time{'s' if count != 1 else ''}\n"
+                leaderboard_text += f"{i}. {server_nickname} ({general_display_name}) - {count} time{'s' if count != 1 else ''}\n"
         
         await ctx.respond(leaderboard_text)
     
@@ -138,28 +159,36 @@ def run_discord_bot():
         # Format leaderboard with pings and server nicknames
         leaderboard_text = "🏆 Daily 67 Leaderboard (Top 10):\n"
         for i, (user_id, count, username, ping_enabled) in enumerate(leaderboard_data, 1):
-            # Try to get server nickname
-            display_name = ""
+            # Try to get server nickname and general display name
+            server_nickname = f"User {user_id}"  # Default fallback
+            general_display_name = username if username else f"User {user_id}"  # Default fallback
+            
             if guild:
                 try:
                     member = guild.get_member(int(user_id))
                     if member:
-                        # display_name shows server nickname if they have one, otherwise username
-                        display_name = member.display_name
+                        # Server nickname (display_name shows server nickname if they have one, otherwise username)
+                        server_nickname = member.display_name
+                        # General Discord display name (global_name or name)
+                        general_display_name = member.global_name if member.global_name else member.name
                     else:
                         # Member not found, use stored username as fallback
-                        display_name = username if username else f"User {user_id}"
+                        server_nickname = username if username else f"User {user_id}"
+                        general_display_name = username if username else f"User {user_id}"
                 except (ValueError, AttributeError):
-                    display_name = username if username else f"User {user_id}"
+                    server_nickname = username if username else f"User {user_id}"
+                    general_display_name = username if username else f"User {user_id}"
             else:
-                display_name = username if username else f"User {user_id}"
+                server_nickname = username if username else f"User {user_id}"
+                general_display_name = username if username else f"User {user_id}"
             
-            # Add ping if enabled, otherwise just show name
+            # Format: If ping enabled: <@user_id> (general discord display name) - x times
+            # Format: If ping disabled: Server nickname (general discord display name) - x times
             if ping_enabled:
                 ping_format = f"<@{user_id}>"
-                leaderboard_text += f"{i}. {ping_format} ({display_name}) - {count} time{'s' if count != 1 else ''}\n"
+                leaderboard_text += f"{i}. {ping_format} ({general_display_name}) - {count} time{'s' if count != 1 else ''}\n"
             else:
-                leaderboard_text += f"{i}. {display_name} - {count} time{'s' if count != 1 else ''}\n"
+                leaderboard_text += f"{i}. {server_nickname} ({general_display_name}) - {count} time{'s' if count != 1 else ''}\n"
         
         try:
             await channel.send(leaderboard_text)
