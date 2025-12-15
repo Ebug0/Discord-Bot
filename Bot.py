@@ -62,7 +62,7 @@ def run_discord_bot():
             return
         
         # Format leaderboard message with server nicknames and pings
-        leaderboard_text = "🏆 67 Leaderboard (use /ping toggle to not get pinged)\n=============================="
+        leaderboard_text = "🏆 67 Leaderboard (use /ping toggle to not get pinged)\n"
         guild = ctx.guild
         for i, (user_id, count, username, ping_enabled) in enumerate(leaderboard_data, 1):
             # Try to get member from guild to show server nickname and general display name
