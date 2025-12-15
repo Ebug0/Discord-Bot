@@ -8,11 +8,11 @@ ALLOWED_LEADERBOARD_USERS = ["195618400796409856"]
 # Add your server ID(s) here as integers to make commands appear instantly
 # To find your server ID: Right-click server > Server Settings > Widget > Server ID (enable Developer Mode first)
 # Leave as empty list [] to register commands globally (can take up to 1 hour to appear)
-GUILD_IDS = []  # Example: [123456789012345678, 987654321098765432]
+GUILD_IDS = [1022903026735927297]  # Example: [123456789012345678, 987654321098765432]
 
 # Channel ID where daily leaderboard posts (as integer or None to use channel name)
 # If None, will use channel name "ebot-haven"
-LEADERBOARD_CHANNEL_ID = None  # Set to channel ID (integer) or None for channel name
+LEADERBOARD_CHANNEL_ID = 1035627095642079354  # Set to channel ID (integer) or None for channel name
 
 # Channel name to use if LEADERBOARD_CHANNEL_ID is None
 LEADERBOARD_CHANNEL_NAME = "ebot-haven"
