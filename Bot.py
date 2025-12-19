@@ -157,7 +157,7 @@ def run_discord_bot():
         guild = channel.guild if hasattr(channel, 'guild') else None
         
         # Format leaderboard with pings and server nicknames
-        leaderboard_text = "🏆 Daily 67 Leaderboard (Top 10):\n"
+        leaderboard_text = "🏆 Daily 67 Leaderboard (use the /ping toggle command to not get pinged)\n"
         for i, (user_id, count, username, ping_enabled) in enumerate(leaderboard_data, 1):
             # Try to get server nickname and general display name
             server_nickname = f"User {user_id}"  # Default fallback
