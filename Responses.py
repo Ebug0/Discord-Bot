@@ -9,14 +9,39 @@ command_67_cooldowns = defaultdict(float)
 
 def handle_response(message, channel, author, username=None) -> str:
     pmessage = message.lower()                                    #makes the message all lowercase characters for comparision
-
+    chance = random.randint(0,200)
     if pmessage == "cum":
         return "Ben said that was a no no word"
 
-    if author == "190245035567087626":  #give james a random chance to get a nice message :)
-        chance = random.randint(0,200)
-        if chance == 100:
-            return "Hi James hope your having a great day!"
+    if author == "190245035567087626" and chance == 100:  #give james a random chance to get a nice message :)
+        return "Hi James hope your having a great day!"
+    
+    if author == "498995283481460786" and chance == 100: #for chucky
+        return "Get back to drawing, Chucky."
+    
+    if author == "227929692353593345" and chance == 100: #for Floppa
+        return "Straight up flopping my comrade."
+    
+    if author == "321800487982858241" and chance == 100: #for Jace
+        return "What a cool dog, probably a good Sol Badguy main too."
+    
+    if author == "325342729494200340" and chance == 100: #for Burger
+        return "I'm going to sue your ass Burger"
+    
+    if author == "293860346790412288" and chance == 100: #for Ben
+        return "Hawk 2a respect button Ben ----->"
+    
+    if author == "293942718801903617" and chance == 100: #for Ty
+        return "Don't forget to eat your protein today Ty"
+    
+    if author == "289200162121842695" and chance == 100: #for Mado
+        return "I'll get back to you soon Amado (AST)"
+    
+    if author == "660284556385058817" and chance == 100: #for Gavin
+        return "Bruh bro wut damn Gavin"
+    
+    if author == "461137261073793034" and chance == 100: #for Tanon
+        return "Even a black ball room dancer got a Tanon"
 
     if "ebot" not in channel:                                   #checks to see if the same thing is said twice and if so send that message in the channel
         if CheckPastMessage.callpastmessage() == pmessage and CheckPastMessage.checkdupmessage(CheckPastMessage.callpastmessage()): 
